@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA ROMA — Streetwear Pernambucano</title>
+
+<!-- Fontes -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Economica:wght@400;700&family=Jost:wght@400;700;900&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <!-- LOGO -->
+  <a href="index.html" class="nav-logo-wrap">
+    <img src="assets/images/logo.png" alt="Nova Roma" style="height:110px;">
+    <span class="logo-wordmark">NOVA <span>ROMA</span></span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#colecao">Coleção</a></li>
+    <li><a href="#clubes">Clubes</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <button class="nav-cart" onclick="toggleCart()">
+    Carrinho
+    <span class="cart-count" id="cart-count">0</span>
+  </button>
+  <button class="menu-toggle" onclick="toggleMenu()" id="menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="#colecao" onclick="toggleMenu()">Coleção</a></li>
+    <li><a href="#clubes" onclick="toggleMenu()">Clubes</a></li>
+    <li><a href="#sobre" onclick="toggleMenu()">Sobre</a></li>
+    <li><a href="#contato" onclick="toggleMenu()">Contato</a></li>
+  </ul>
+  <button class="btn-primary mobile-cart-btn" onclick="toggleCart(); toggleMenu()">
+    Carrinho (<span id="mobile-cart-count">0</span>)
+  </button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Streetwear · Recife · Pernambuco</p>
+    <h1 class="hero-title">
+      <span class="outline">CRIADO POR</span>
+      <span class="brown">TORCEDORES</span>
+      USADO POR TORCEDORES
+    </h1>
+    <p class="hero-desc">Moda streetwear que carrega a alma dos maiores clubes de Pernambuco. Do Recife para o mundo, com a garra do futebol nordestino em cada detalhe.</p>
+    <div class="hero-ctas">
+      <a href="#colecao" class="btn-primary">Ver Coleção</a>
+      <a href="#clubes" class="btn-ghost">Seu Clube</a>
+    </div>
+    <div class="scroll-hint">
+      <span class="scroll-line"></span>
+      Scroll
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-pattern"></div>
+    <div class="hero-right-block"></div>
+    <div class="hero-shirt-wrap">
+      <svg class="shirt-mockup" viewBox="0 0 300 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 80 L28 115 L62 148 L82 128 L82 305 L218 305 L218 128 L238 148 L272 115 L240 80 L198 58 Q150 38 102 58 Z" fill="#FFFFFF"/>
+        <path d="M60 80 L28 115 L62 148 L82 128 L82 305 L218 305 L218 128 L238 148 L272 115 L240 80 L198 58 Q150 38 102 58 Z" stroke="#E0D5C8" stroke-width="1" fill="none"/>
+        <path d="M118 58 Q150 76 182 58 L178 82 Q150 98 122 82 Z" fill="#3D2010"/>
+        <rect x="82" y="60" width="50" height="245" fill="#C49A6C" opacity="0.18"/>
+        <line x1="82" y1="60" x2="82" y2="305" stroke="#C49A6C" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="158" cy="178" r="34" fill="none" stroke="#3D2010" stroke-width="1.2"/>
+        <circle cx="158" cy="178" r="28" fill="rgba(61,32,16,0.05)"/>
+        <text x="158" y="169" text-anchor="middle" font-family="serif" font-size="7" fill="#3D2010" font-weight="700" letter-spacing="3">NOVA</text>
+        <text x="158" y="183" text-anchor="middle" font-family="serif" font-size="14" fill="#3D2010" font-weight="900">ROMA</text>
+        <text x="158" y="194" text-anchor="middle" font-family="sans-serif" font-size="5.5" fill="#6B3F1F" letter-spacing="3">RECIFE · PE</text>
+        <line x1="124" y1="202" x2="192" y2="202" stroke="#6B3F1F" stroke-width="0.5" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="hero-stamp">
+      <span>EST</span>
+      <span class="stamp-yr">2025</span>
+      <span>Recife</span>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Leão</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">Timbu</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">Cobra Coral</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">Nova Roma · Recife · PE</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">Feito com Orgulho Nordestino</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">Leão</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">Timbu</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">Cobra Coral</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">Nova Roma · Recife · PE</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">Feito com Orgulho Nordestino</span><span class="ticker-sep">◆</span>
+  </div>
+</div>
+
+<!-- COLEÇÃO -->
+<section class="section" id="colecao">
+  <p class="section-eyebrow">Nova Coleção</p>
+  <h2 class="section-title">DROP 2025.1</h2>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filter('all',this)">Todos</button>
+    <button class="filter-btn" onclick="filter('sport',this)">Leão</button>
+    <button class="filter-btn" onclick="filter('nautico',this)">Timbu</button>
+    <button class="filter-btn" onclick="filter('santa',this)">Cobra Coral</button>
+  </div>
+
+  <div class="products-grid" id="grid">
+
+    <div class="product-card" data-club="sport">
+      <div class="prod-bg" style="background:#0f0f0f;">
+        <svg width="100%" height="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="400" fill="#111"/>
+          <path d="M68 98 L36 130 L64 160 L86 140 L86 358 L214 358 L214 140 L236 160 L264 130 L232 98 L198 76 Q150 56 102 76 Z" fill="#CC0000"/>
+          <rect x="86" y="76" width="52" height="282" fill="#111"/>
+          <text x="152" y="235" text-anchor="middle" font-family="serif" font-size="52" fill="rgba(204,0,0,0.1)" font-weight="900">SC</text>
+          <circle cx="162" cy="195" r="34" fill="rgba(0,0,0,0.6)" stroke="#C49A6C" stroke-width="1"/>
+          <text x="162" y="188" text-anchor="middle" font-family="sans-serif" font-size="6.5" fill="#C49A6C" letter-spacing="2">SPORT CLUB</text>
+          <text x="162" y="202" text-anchor="middle" font-family="serif" font-size="15" fill="#fff" font-weight="700">1905</text>
+          <text x="162" y="215" text-anchor="middle" font-family="sans-serif" font-size="6" fill="#C49A6C" letter-spacing="2">RECIFE</text>
+        </svg>
+      </div>
+      <div class="prod-overlay">
+        <button class="prod-add" onclick="add('Leão Noir', 'sport', 259)">+ Adicionar ao Carrinho</button>
+      </div>
+      <div class="prod-badge badge-new">Novo</div>
+      <div class="prod-info">
+        <p class="prod-club sport">Leão</p>
+        <p class="prod-name">Leão Noir</p>
+        <p class="prod-price">R$&nbsp;259,00</p>
+      </div>
+    </div>
+
+    <div class="product-card" data-club="nautico">
+      <div class="prod-bg" style="background:#f5f0ea;">
+        <svg width="100%" height="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="400" fill="#f5f0ea"/>
+          <path d="M68 98 L36 130 L64 160 L86 140 L86 358 L214 358 L214 140 L236 160 L264 130 L232 98 L198 76 Q150 56 102 76 Z" fill="#f5f0ea"/>
+          <rect x="86" y="76" width="128" height="282" fill="#fff"/>
+          <rect x="86" y="76" width="42" height="282" fill="#7B1C3B"/>
+          <rect x="172" y="76" width="42" height="282" fill="#7B1C3B"/>
+          <circle cx="150" cy="200" r="34" fill="rgba(123,28,59,0.07)" stroke="#7B1C3B" stroke-width="1.5"/>
+          <text x="150" y="193" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#7B1C3B" letter-spacing="2">NÁUTICO</text>
+          <text x="150" y="207" text-anchor="middle" font-family="serif" font-size="14" fill="#7B1C3B" font-weight="700">TIMBU</text>
+          <text x="150" y="221" text-anchor="middle" font-family="sans-serif" font-size="5.5" fill="#7B1C3B" letter-spacing="2">1901 · RECIFE</text>
+        </svg>
+      </div>
+      <div class="prod-overlay">
+        <button class="prod-add" onclick="add('Timbu Branco', 'náutico', 239)">+ Adicionar ao Carrinho</button>
+      </div>
+      <div class="prod-badge badge-drop">Drop</div>
+      <div class="prod-info">
+        <p class="prod-club nautico">Timbu</p>
+        <p class="prod-name">Timbu Branco</p>
+        <p class="prod-price">R$&nbsp;239,00 <span class="old">R$&nbsp;289,00</span></p>
+      </div>
+    </div>
+
+    <div class="product-card" data-club="santa">
+      <div class="prod-bg" style="background:#f5f0ea;">
+        <svg width="100%" height="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="400" fill="#f5f0ea"/>
+          <path d="M68 98 L36 130 L64 160 L86 140 L86 358 L214 358 L214 140 L236 160 L264 130 L232 98 L198 76 Q150 56 102 76 Z" fill="#E8000B"/>
+          <rect x="86" y="76" width="128" height="282" fill="#fff"/>
+          <rect x="86" y="76" width="42" height="282" fill="#E8000B"/>
+          <circle cx="150" cy="195" r="36" fill="rgba(232,0,11,0.06)" stroke="#E8000B" stroke-width="1.5"/>
+          <text x="150" y="186" text-anchor="middle" font-family="sans-serif" font-size="7" fill="#E8000B" letter-spacing="2">SANTA CRUZ</text>
+          <text x="150" y="201" text-anchor="middle" font-family="serif" font-size="14" fill="#E8000B" font-weight="700">TRICOLOR</text>
+          <text x="150" y="215" text-anchor="middle" font-family="sans-serif" font-size="5.5" fill="#E8000B" letter-spacing="2">DO NORDESTE</text>
+        </svg>
+      </div>
+      <div class="prod-overlay">
+        <button class="prod-add" onclick="add('Tricolor Day', 'santa cruz', 249)">+ Adicionar ao Carrinho</button>
+      </div>
+      <div class="prod-badge badge-lim">Limited</div>
+      <div class="prod-info">
+        <p class="prod-club santa">Cobra Coral</p>
+        <p class="prod-name">Tricolor Day</p>
+        <p class="prod-price">R$&nbsp;249,00</p>
+      </div>
+    </div>
+
+    <div class="product-card" data-club="sport">
+      <div class="prod-bg" style="background:#f5f0ea;">
+        <svg width="100%" height="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="400" fill="#f5f0ea"/>
+          <path d="M68 98 L36 130 L64 160 L86 140 L86 358 L214 358 L214 140 L236 160 L264 130 L232 98 L198 76 Q150 56 102 76 Z" fill="#CC0000"/>
+          <rect x="86" y="76" width="128" height="282" fill="#fff"/>
+          <rect x="86" y="76" width="52" height="282" fill="#CC0000"/>
+          <circle cx="162" cy="195" r="34" fill="rgba(245,240,234,0.9)" stroke="#CC0000" stroke-width="1.5"/>
+          <text x="162" y="188" text-anchor="middle" font-family="sans-serif" font-size="6.5" fill="#CC0000" letter-spacing="2">SPORT</text>
+          <text x="162" y="203" text-anchor="middle" font-family="serif" font-size="14" fill="#CC0000" font-weight="900">RUBRO</text>
+          <text x="162" y="216" text-anchor="middle" font-family="sans-serif" font-size="6" fill="#CC0000" letter-spacing="2">NEGRO</text>
+        </svg>
+      </div>
+      <div class="prod-overlay">
+        <button class="prod-add" onclick="add('Rubro Clássico', 'sport', 269)">+ Adicionar ao Carrinho</button>
+      </div>
+      <div class="prod-badge badge-new">Novo</div>
+      <div class="prod-info">
+        <p class="prod-club sport">Leão</p>
+        <p class="prod-name">Rubro Clássico</p>
+        <p class="prod-price">R$&nbsp;269,00</p>
+      </div>
+    </div>
+
+    <div class="product-card" data-club="nautico">
+      <div class="prod-bg" style="background:#080d18;">
+        <svg width="100%" height="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="400" fill="#080d18"/>
+          <path d="M68 98 L36 130 L64 160 L86 140 L86 358 L214 358 L214 140 L236 160 L264 130 L232 98 L198 76 Q150 56 102 76 Z" fill="#7B1C3B"/>
+          <rect x="86" y="76" width="128" height="282" fill="#7B1C3B"/>
+          <rect x="86" y="76" width="50" height="282" fill="#c9e0f5" opacity="0.85"/>
+          <circle cx="162" cy="195" r="34" fill="rgba(8,13,24,0.75)" stroke="#C49A6C" stroke-width="1"/>
+          <text x="162" y="188" text-anchor="middle" font-family="sans-serif" font-size="6.5" fill="#C49A6C" letter-spacing="2">NÁUTICO</text>
+          <text x="162" y="203" text-anchor="middle" font-family="serif" font-size="16" fill="#fff" font-weight="700">1901</text>
+          <text x="162" y="215" text-anchor="middle" font-family="sans-serif" font-size="5.5" fill="#C49A6C" letter-spacing="2">DARK EDITION</text>
+        </svg>
+      </div>
+      <div class="prod-overlay">
+        <button class="prod-add" onclick="add('Timbu Noir', 'náutico', 279)">+ Adicionar ao Carrinho</button>
+      </div>
+      <div class="prod-badge badge-drop">Drop</div>
+      <div class="prod-info">
+        <p class="prod-club nautico">Timbu</p>
+        <p class="prod-name">Timbu Noir</p>
+        <p class="prod-price">R$&nbsp;279,00</p>
+      </div>
+    </div>
+
+    <div class="product-card" data-club="santa">
+      <div class="prod-bg" style="background:#0a0707;">
+        <svg width="100%" height="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="400" fill="#0a0707"/>
+          <path d="M68 98 L36 130 L64 160 L86 140 L86 358 L214 358 L214 140 L236 160 L264 130 L232 98 L198 76 Q150 56 102 76 Z" fill="#111"/>
+          <rect x="86" y="76" width="128" height="282" fill="#111"/>
+          <rect x="86" y="125" width="128" height="12" fill="#E8000B" opacity="0.75"/>
+          <rect x="86" y="185" width="128" height="12" fill="#E8000B" opacity="0.75"/>
+          <rect x="86" y="245" width="128" height="12" fill="#E8000B" opacity="0.75"/>
+          <rect x="86" y="305" width="128" height="12" fill="#E8000B" opacity="0.75"/>
+          <circle cx="150" cy="200" r="40" fill="#0a0707"/>
+          <circle cx="150" cy="200" r="36" fill="none" stroke="#E8000B" stroke-width="1.5"/>
+          <text x="150" y="191" text-anchor="middle" font-family="sans-serif" font-size="6.5" fill="#E8000B" letter-spacing="2">SANTA CRUZ</text>
+          <text x="150" y="207" text-anchor="middle" font-family="serif" font-size="17" fill="#fff" font-weight="900">1914</text>
+          <text x="150" y="219" text-anchor="middle" font-family="sans-serif" font-size="5.5" fill="rgba(255,255,255,0.35)" letter-spacing="2">FUTEBOL CLUBE</text>
+        </svg>
+      </div>
+      <div class="prod-overlay">
+        <button class="prod-add" onclick="add('Santa Cruz Dark', 'santa cruz', 259)">+ Adicionar ao Carrinho</button>
+      </div>
+      <div class="prod-badge badge-lim">Limited</div>
+      <div class="prod-info">
+        <p class="prod-club santa">Cobra Coral</p>
+        <p class="prod-name">Santa Cruz Dark</p>
+        <p class="prod-price">R$&nbsp;259,00 <span class="old">R$&nbsp;309,00</span></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CLUBES -->
+<div class="clubs-section" id="clubes">
+  <p class="section-eyebrow">Os Três Gigantes</p>
+  <h2 class="section-title">ESCOLHA<br>SUA CAMISA</h2>
+  <div class="clubs-grid">
+    <div class="club-card">
+      <div class="club-glow glow-s"></div>
+      <span class="club-icon">🦁</span>
+      <h3 class="club-card-name">Leão</h3>
+      <p class="club-card-sub">Fundado em 1905 · Rubro-Negro</p>
+      <span class="club-pill sp">12 peças</span>
+    </div>
+    <div class="club-card">
+      <div class="club-glow glow-n"></div>
+      <span class="club-icon">⚓</span>
+      <h3 class="club-card-name">Timbu</h3>
+      <p class="club-card-sub">Fundado em 1901 · Alvirrubro</p>
+      <span class="club-pill np">9 peças</span>
+    </div>
+    <div class="club-card">
+      <div class="club-glow glow-sc"></div>
+      <span class="club-icon">🦈</span>
+      <h3 class="club-card-name">Cobra Coral</h3>
+      <p class="club-card-sub">Fundado em 1914 · Tricolor</p>
+      <span class="club-pill scp">11 peças</span>
+    </div>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="sobre">
+  <div>
+    <p class="section-eyebrow">Nossa história</p>
+    <h2 class="section-title">FEITO POR<br>TORCEDORES</h2>
+    <blockquote class="manifesto-quote">"Futebol pernambucano é fé, raça e identidade."</blockquote>
+    <p class="manifesto-body">A Nova Roma nasceu nas ruas do Recife, onde futebol e cultura se fundem em paixão pura. Cada camiseta é um manifesto — de quem vai ao estádio, de quem grita na quebrada, de quem carrega o escudo no peito além das quatro linhas.<br><br>Produção local, tecidos de qualidade, design que respeita a história dos três gigantes do estado. Sem rodeios, sem modinha. Só orgulho pernambucano de verdade.</p>
+  </div>
+  <div class="manifesto-visual">
+    <div class="mv-b"><span class="mv-txt">LEÃO<br>DO NORTE</span></div>
+    <div class="mv-b"><span class="mv-txt">O<br>TIMBU</span></div>
+    <div class="mv-b"><span class="mv-txt">TRICOLOR<br>DO NE</span></div>
+    <div class="mv-b"><span class="mv-txt">EST.<br>1901</span></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter" id="contato">
+  <p class="section-eyebrow">Fique por dentro</p>
+  <h2 class="section-title">PRÓXIMO DROP<br>EM BREVE</h2>
+  <p class="nl-sub">Acesso antecipado para quem é fiel ao clube.</p>
+  <div class="nl-form">
+    <input type="email" class="nl-input" placeholder="seu@email.com" id="nl-email"/>
+    <button class="nl-btn" onclick="subscribe()">Entrar</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <!-- LOGO FOOTER -->
+      <div class="footer-logo-wrap">
+        <img src="assets/images/logo.png" alt="Nova Roma" style="height:50px;">
+        <span class="footer-logo-text">NOVA <span>ROMA</span></span>
+      </div>
+      <p class="footer-tag">Streetwear pernambucano feito por torcedores, para torcedores. Recife, PE.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Coleções</h4>
+      <ul>
+        <li>Leão Collection</li>
+        <li>Timbu Collection</li>
+        <li>Cobra Coral Collection</li>
+        <li>Collab Drops</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Informações</h4>
+      <ul>
+        <li>Sobre Nós</li>
+        <li>Guia de Tamanhos</li>
+        <li>Política de Troca</li>
+        <li>Frete e Entrega</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li>contato@novaroma.com</li>
+        <li>Recife — PE</li>
+        <li>Instagram</li>
+        <li>WhatsApp</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Nova Roma — Todos os direitos reservados</p>
+    <div class="footer-socials">
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<!-- CART -->
+<div class="cart-overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="sidebar">
+  <div class="cart-hdr">
+    <h3 class="cart-hdr-title">Carrinho</h3>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">Seu carrinho está vazio.</div>
+  </div>
+  <div class="cart-ftr" id="cart-ftr" style="display:none;">
+    <div class="cart-total">
+      <span>Total</span>
+      <span class="cart-total-val" id="cart-total">R$&nbsp;0,00</span>
+    </div>
+    <button class="btn-primary" style="width:100%;padding:16px;text-align:center;" onclick="checkout()">Finalizar Pedido</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- JavaScript -->
+<script src="assets/js/carrinho.js"></script>
+<script src="assets/js/produtos.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

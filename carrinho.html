@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrinho — NOVA ROMA</title>
+
+<!-- Fontes -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Economica:wght@400;700&family=Jost:wght@400;700;900&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/components.css">
+
+<style>
+  /* Estilos específicos da página do carrinho */
+  .cart-page {
+    padding: 160px 5vw 90px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .cart-page-header {
+    border-bottom: 2px solid rgba(107,63,31,0.12);
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .cart-page-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 900;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .cart-page-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .cart-page-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 4rem;
+  }
+
+  .cart-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .cart-page-item {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 2rem;
+    padding: 2rem;
+    background: var(--white2);
+    border: 1px solid rgba(107,63,31,0.08);
+    transition: border-color 0.2s;
+  }
+
+  .cart-page-item:hover {
+    border-color: rgba(107,63,31,0.2);
+  }
+
+  .cart-page-item-image {
+    width: 120px;
+    height: 120px;
+    background: var(--white3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+  }
+
+  .cart-page-item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cart-page-item-club {
+    font-family: 'Economica', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .cart-page-item-club.sport { color: #CC0000; }
+  .cart-page-item-club.nautico { color: #7B1C3B; }
+  .cart-page-item-club.santa { color: #E8000B; }
+
+  .cart-page-item-name {
+    font-family: 'Economica', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .cart-page-item-details {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .cart-page-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .qty-label {
+    font-family: 'Economica', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .qty-value {
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+
+  .cart-page-item-price-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .cart-page-item-price {
+    font-family: 'Economica', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--brown);
+  }
+
+  .cart-page-item-remove {
+    background: none;
+    border: 1px solid rgba(26,23,20,0.15);
+    color: var(--text-muted);
+    padding: 8px 16px;
+    font-family: 'Economica', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cart-page-item-remove:hover {
+    background: #CC0000;
+    border-color: #CC0000;
+    color: white;
+  }
+
+  .cart-summary {
+    background: var(--white2);
+    padding: 2.5rem;
+    border: 1px solid rgba(107,63,31,0.12);
+    height: fit-content;
+    position: sticky;
+    top: 150px;
+  }
+
+  .cart-summary-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(107,63,31,0.12);
+  }
+
+  .cart-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .cart-summary-label {
+    color: var(--text-muted);
+  }
+
+  .cart-summary-value {
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+
+  .cart-summary-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    border-top: 2px solid rgba(107,63,31,0.15);
+    font-family: 'Economica', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .cart-summary-total-value {
+    color: var(--brown);
+    font-size: 1.8rem;
+  }
+
+  .cart-summary-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .cart-empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+  }
+
+  .cart-empty-icon {
+    font-size: 5rem;
+    opacity: 0.2;
+    margin-bottom: 2rem;
+  }
+
+  .cart-empty-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+  }
+
+  .cart-empty-text {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .cart-page {
+      padding-top: 150px;
+    }
+
+    .cart-page-content {
+      grid-template-columns: 1fr;
+    }
+
+    .cart-page-item {
+      grid-template-columns: 80px 1fr;
+      gap: 1rem;
+    }
+
+    .cart-page-item-price-section {
+      grid-column: 2;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+
+    .cart-summary {
+      position: static;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo-wrap">
+    <img src="assets/images/logo.png" alt="Nova Roma" style="height:110px;">
+    <span class="logo-wordmark">NOVA <span>ROMA</span></span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html#colecao">Coleção</a></li>
+    <li><a href="index.html#clubes">Clubes</a></li>
+    <li><a href="index.html#sobre">Sobre</a></li>
+    <li><a href="index.html#contato">Contato</a></li>
+  </ul>
+  <button class="nav-cart" onclick="window.location.href='carrinho.html'">
+    Carrinho
+    <span class="cart-count" id="cart-count">0</span>
+  </button>
+  <button class="menu-toggle" onclick="toggleMenu()" id="menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="index.html#colecao">Coleção</a></li>
+    <li><a href="index.html#clubes">Clubes</a></li>
+    <li><a href="index.html#sobre">Sobre</a></li>
+    <li><a href="index.html#contato">Contato</a></li>
+  </ul>
+  <button class="btn-primary mobile-cart-btn" onclick="window.location.href='carrinho.html'; toggleMenu()">
+    Carrinho (<span id="mobile-cart-count">0</span>)
+  </button>
+</div>
+
+<!-- CARRINHO PAGE -->
+<div class="cart-page">
+  <div class="cart-page-header">
+    <h1 class="cart-page-title">Seu Carrinho</h1>
+    <p class="cart-page-subtitle" id="cart-subtitle">3 itens no carrinho</p>
+  </div>
+
+  <div class="cart-page-content" id="cart-content">
+    <!-- Conteúdo será injetado via JavaScript -->
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo-wrap">
+        <img src="assets/images/logo.png" alt="Nova Roma" style="height:50px;">
+        <span class="footer-logo-text">NOVA <span>ROMA</span></span>
+      </div>
+      <p class="footer-tag">Streetwear pernambucano feito por torcedores, para torcedores. Recife, PE.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Coleções</h4>
+      <ul>
+        <li>Leão Collection</li>
+        <li>Timbu Collection</li>
+        <li>Cobra Coral Collection</li>
+        <li>Collab Drops</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Informações</h4>
+      <ul>
+        <li>Sobre Nós</li>
+        <li>Guia de Tamanhos</li>
+        <li>Política de Troca</li>
+        <li>Frete e Entrega</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li>contato@novaroma.com</li>
+        <li>Recife — PE</li>
+        <li>Instagram</li>
+        <li>WhatsApp</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Nova Roma — Todos os direitos reservados</p>
+    <div class="footer-socials">
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- JavaScript -->
+<script src="assets/js/carrinho.js"></script>
+<script src="assets/js/produtos.js"></script>
+<script src="assets/js/main.js"></script>
+
+<script>
+  /**
+   * Renderiza o carrinho na página dedicada
+   */
+  function renderCartPage() {
+    const contentEl = document.getElementById('cart-content');
+    const subtitleEl = document.getElementById('cart-subtitle');
+
+    // Atualiza contadores
+    const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+    document.getElementById('cart-count').textContent = totalItems;
+
+    // Atualiza subtitle
+    subtitleEl.textContent = totalItems === 0 ? 'Carrinho vazio' :
+      totalItems === 1 ? '1 item no carrinho' : `${totalItems} itens no carrinho`;
+
+    // Se carrinho vazio
+    if (!cart.length) {
+      contentEl.innerHTML = `
+        <div class="cart-empty-state">
+          <div class="cart-empty-icon">🛒</div>
+          <h2 class="cart-empty-title">Seu carrinho está vazio</h2>
+          <p class="cart-empty-text">Adicione produtos incríveis da nossa coleção!</p>
+          <a href="index.html#colecao" class="btn-primary">Ver Coleção</a>
+        </div>
+      `;
+      return;
+    }
+
+    // Calcula valores
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const frete = subtotal > 300 ? 0 : 25;
+    const total = subtotal + frete;
+
+    // Renderiza itens e resumo
+    contentEl.innerHTML = `
+      <div class="cart-items-list">
+        ${cart.map(item => `
+          <div class="cart-page-item">
+            <div class="cart-page-item-image">${item.icon}</div>
+            <div class="cart-page-item-info">
+              <div>
+                <p class="cart-page-item-club ${item.club}">${item.club.toUpperCase()}</p>
+                <h3 class="cart-page-item-name">${item.name}</h3>
+                <p class="cart-page-item-details">Tamanho: M • Cor: Original</p>
+              </div>
+              <div class="cart-page-item-qty">
+                <span class="qty-label">Quantidade:</span>
+                <span class="qty-value">${item.qty}</span>
+              </div>
+            </div>
+            <div class="cart-page-item-price-section">
+              <span class="cart-page-item-price">R$ ${(item.price * item.qty).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+              <button class="cart-page-item-remove" onclick="removeFromCartPage('${item.name}')">Remover</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="cart-summary">
+        <h2 class="cart-summary-title">Resumo do Pedido</h2>
+        <div class="cart-summary-row">
+          <span class="cart-summary-label">Subtotal</span>
+          <span class="cart-summary-value">R$ ${subtotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+        </div>
+        <div class="cart-summary-row">
+          <span class="cart-summary-label">Frete</span>
+          <span class="cart-summary-value">${frete === 0 ? 'Grátis' : 'R$ ' + frete.toFixed(2).replace('.', ',')}</span>
+        </div>
+        ${subtotal > 300 ? '' : '<p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Frete grátis acima de R$ 300,00</p>'}
+        <div class="cart-summary-total">
+          <span>Total</span>
+          <span class="cart-summary-total-value">R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+        </div>
+        <div class="cart-summary-actions">
+          <button class="btn-primary" style="width:100%; padding: 16px; text-align: center;" onclick="window.location.href='checkout.html'">
+            Finalizar Pedido
+          </button>
+          <a href="index.html#colecao" class="btn-ghost" style="width:100%; padding: 16px; text-align: center;">
+            Continuar Comprando
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Remove item do carrinho na página dedicada
+   */
+  function removeFromCartPage(name) {
+    remove(name);
+    renderCartPage();
+    toast('Item removido do carrinho');
+  }
+
+  // Carrega carrinho ao iniciar
+  window.addEventListener('DOMContentLoaded', renderCartPage);
+</script>
+</body>
+</html>
