@@ -1,0 +1,286 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if produto %}Editar{% else %}Novo{% endif %} Produto — Nova Roma</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700;900&family=Economica:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --brown: #6B3F1F;
+    --brown-dark: #3D2010;
+    --brown-light: #C49A6C;
+    --brown-pale: #F0E4D0;
+    --white: #FFFFFF;
+    --white2: #F9F6F2;
+    --text-dark: #1a1714;
+    --text-muted: #9a8878;
+    --danger: #CC0000;
+  }
+  body {
+    font-family: 'Economica', sans-serif;
+    background: var(--white2);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--brown-dark);
+    padding: 0 5vw;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-logo {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    color: var(--brown-pale);
+    text-decoration: none;
+  }
+  .header-logo span { color: var(--brown-light); }
+  .header-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+  }
+  main { max-width: 700px; margin: 0 auto; padding: 48px 5vw; }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
+  }
+  .back:hover { color: var(--brown); }
+  .page-title {
+    font-family: 'Jost', sans-serif;
+    font-weight: 900;
+    font-size: 1.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brown-dark);
+    margin-bottom: 2.5rem;
+  }
+  .form-card {
+    background: var(--white);
+    border: 1px solid rgba(107,63,31,0.1);
+    padding: 2.5rem;
+  }
+  .form-group { margin-bottom: 1.75rem; }
+  label {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--brown);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    width: 100%;
+    background: var(--white2);
+    border: 1px solid rgba(107,63,31,0.2);
+    padding: 12px 16px;
+    font-family: 'Economica', sans-serif;
+    font-size: 1rem;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  textarea:focus {
+    border-color: var(--brown);
+  }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+  .foto-upload-area {
+    border: 1px dashed rgba(107,63,31,0.35);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--white2);
+  }
+  .foto-upload-area:hover { border-color: var(--brown); background: var(--brown-pale); }
+  .foto-upload-area input { display: none; }
+  .foto-upload-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .foto-upload-label strong { color: var(--brown); }
+  .fotos-atuais {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+    margin-top: 1rem;
+  }
+  .foto-item {
+    position: relative;
+  }
+  .foto-item img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    border: 1px solid rgba(107,63,31,0.1);
+  }
+  .foto-item label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--danger);
+    margin-top: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .foto-item input[type="checkbox"] { accent-color: var(--danger); }
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(107,63,31,0.1);
+  }
+  .btn {
+    background: var(--brown);
+    color: var(--white);
+    border: none;
+    padding: 14px 36px;
+    font-family: 'Economica', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: var(--brown-dark); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid rgba(107,63,31,0.2);
+    padding: 14px 28px;
+    font-family: 'Economica', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--brown); color: var(--brown); }
+  #preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 6px;
+    margin-top: 10px;
+  }
+  #preview-grid img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 1px solid rgba(107,63,31,0.15);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="{% url 'index' %}" class="header-logo">NOVA <span>ROMA</span></a>
+  <span class="header-tag">Painel de Administração</span>
+</header>
+
+<main>
+  <a href="{% url 'adeeme' %}" class="back">← Voltar</a>
+  <h1 class="page-title">{% if produto %}Editar Produto{% else %}Novo Produto{% endif %}</h1>
+
+  <div class="form-card">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" value="{{ produto.titulo|default:'' }}" placeholder="Ex: Leão Noir" required>
+      </div>
+
+      <div class="form-group">
+        <label for="preco">Preço (R$)</label>
+        <input type="number" id="preco" name="preco" value="{{ produto.preco|default:'' }}" placeholder="259.00" step="0.01" min="0" required>
+      </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" placeholder="Descreva o produto...">{{ produto.descricao|default:'' }}</textarea>
+      </div>
+
+      {% if produto and produto.fotos.exists %}
+      <div class="form-group">
+        <label>Fotos Atuais</label>
+        <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:0.06em;">Marque as fotos que deseja remover.</p>
+        <div class="fotos-atuais">
+          {% for foto in produto.fotos.all %}
+          <div class="foto-item">
+            <img src="{{ foto.foto.url }}" alt="Foto {{ forloop.counter }}">
+            <label>
+              <input type="checkbox" name="deletar_foto" value="{{ foto.pk }}">
+              Remover
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="form-group">
+        <label>{% if produto %}Adicionar Fotos{% else %}Fotos{% endif %}</label>
+        <div class="foto-upload-area" onclick="document.getElementById('fotos-input').click()">
+          <input type="file" id="fotos-input" name="fotos" multiple accept="image/*" onchange="previewFotos(this)">
+          <p class="foto-upload-label">Clique para selecionar ou arraste aqui<br><strong>JPG, PNG, WEBP</strong> — múltiplas fotos permitidas</p>
+        </div>
+        <div id="preview-grid"></div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn">Salvar Produto</button>
+        <a href="{% url 'adeeme' %}" class="btn-ghost">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script>
+  function previewFotos(input) {
+    var grid = document.getElementById('preview-grid');
+    grid.innerHTML = '';
+    Array.from(input.files).forEach(function(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        grid.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+</script>
+
+</body>
+</html>
