@@ -180,12 +180,11 @@ O projeto é totalmente responsivo com breakpoint principal em 900px:
 
 ## 🌿 Branches do Projeto
 
-O projeto possui **2 branches principais**:
+O projeto utiliza **uma única branch**:
 
-| Branch  | Descrição                                                  |
-|---------|------------------------------------------------------------|
-| `main`  | Branch principal — use esta para novos desenvolvimentos e PRs |
-| `master`| Branch legada — mantida apenas por histórico; não utilizar para novos commits |
+| Branch | Descrição                                          |
+|--------|----------------------------------------------------|
+| `main` | Branch principal — todos os desenvolvimentos e PRs |
 
 ## 📄 Licença
 
