@@ -7,7 +7,7 @@
 <title>NOVA ROMA — Streetwear Pernambucano</title>
 
 <!-- Fontes -->
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Economica:wght@400;700&family=Jost:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=DM+Serif+Display&family=Economica:wght@400;700&family=Jost:wght@400;700;900&display=swap" rel="stylesheet">
 
 <!-- CSS -->
 <link rel="stylesheet" href="{% static 'css/components.css' %}">
@@ -117,20 +117,21 @@
   <div class="hero-right">
     <div class="hero-right-pattern"></div>
     <div class="hero-right-block"></div>
-    <div class="hero-shirt-wrap">
-      <svg class="shirt-mockup" viewBox="0 0 300 340" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M60 80 L28 115 L62 148 L82 128 L82 305 L218 305 L218 128 L238 148 L272 115 L240 80 L198 58 Q150 38 102 58 Z" fill="#FFFFFF"/>
-        <path d="M60 80 L28 115 L62 148 L82 128 L82 305 L218 305 L218 128 L238 148 L272 115 L240 80 L198 58 Q150 38 102 58 Z" stroke="#E0D5C8" stroke-width="1" fill="none"/>
-        <path d="M118 58 Q150 76 182 58 L178 82 Q150 98 122 82 Z" fill="#3D2010"/>
-        <rect x="82" y="60" width="50" height="245" fill="#C49A6C" opacity="0.18"/>
-        <line x1="82" y1="60" x2="82" y2="305" stroke="#C49A6C" stroke-width="0.8" opacity="0.6"/>
-        <circle cx="158" cy="178" r="34" fill="none" stroke="#3D2010" stroke-width="1.2"/>
-        <circle cx="158" cy="178" r="28" fill="rgba(61,32,16,0.05)"/>
-        <text x="158" y="169" text-anchor="middle" font-family="serif" font-size="7" fill="#3D2010" font-weight="700" letter-spacing="3">NOVA</text>
-        <text x="158" y="183" text-anchor="middle" font-family="serif" font-size="14" fill="#3D2010" font-weight="900">ROMA</text>
-        <text x="158" y="194" text-anchor="middle" font-family="sans-serif" font-size="5.5" fill="#6B3F1F" letter-spacing="3">RECIFE · PE</text>
-        <line x1="124" y1="202" x2="192" y2="202" stroke="#6B3F1F" stroke-width="0.5" opacity="0.5"/>
-      </svg>
+    <div class="hero-polaroid-wrap">
+      <div class="polaroid">
+        <div class="polaroid-slides" id="polaroid-slides">
+          {% for foto in carrosel_fotos %}
+          <div class="polaroid-slide {% if forloop.first %}active{% endif %}" style="background:#2a1a0e;">
+            <img src="{{ foto }}" alt="Nova Roma">
+          </div>
+          {% empty %}
+          <div class="polaroid-slide active" style="background:#2a1a0e;display:flex;align-items:center;justify-content:center;">
+            <span style="color:rgba(196,154,108,0.4);font-family:'Economica',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-align:center;">ADICIONE FOTOS EM<br>static/images/carrosel/</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="polaroid-dots" id="polaroid-dots"></div>
     </div>
     <div class="hero-stamp">
       <span>EST</span>

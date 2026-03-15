@@ -130,6 +130,16 @@
   }
   .foto-item {
     position: relative;
+    cursor: grab;
+    user-select: none;
+  }
+  .foto-item.dragging {
+    opacity: 0.4;
+    cursor: grabbing;
+  }
+  .foto-item.drag-over {
+    outline: 2px solid var(--brown);
+    outline-offset: 2px;
   }
   .foto-item img {
     width: 100%;
@@ -137,6 +147,34 @@
     object-fit: cover;
     display: block;
     border: 1px solid rgba(107,63,31,0.1);
+    pointer-events: none;
+  }
+  .foto-drag-handle {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: rgba(61,32,16,0.6);
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 5px;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .foto-ordem-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: var(--brown);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
   }
   .foto-item label {
     display: flex;
@@ -235,10 +273,14 @@
       <div class="form-group">
         <label>Fotos Atuais</label>
         <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:0.06em;">Marque as fotos que deseja remover.</p>
-        <div class="fotos-atuais">
+        <p style="font-size:0.68rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:0.06em;">Arraste para reordenar. Marque para remover.</p>
+        <div class="fotos-atuais" id="fotos-grid">
           {% for foto in produto.fotos.all %}
-          <div class="foto-item">
+          <div class="foto-item" draggable="true" data-pk="{{ foto.pk }}">
             <img src="{{ foto.foto.url }}" alt="Foto {{ forloop.counter }}">
+            <span class="foto-drag-handle">⠿</span>
+            <span class="foto-ordem-badge">{{ forloop.counter }}</span>
+            <input type="hidden" name="ordem_{{ foto.pk }}" value="{{ forloop.counter0 }}">
             <label>
               <input type="checkbox" name="deletar_foto" value="{{ foto.pk }}">
               Remover
@@ -279,6 +321,62 @@
       };
       reader.readAsDataURL(file);
     });
+  }
+
+  // ── DRAG & DROP REORDENAÇÃO ──
+  var fotosGrid = document.getElementById('fotos-grid');
+  if (fotosGrid) {
+    var dragged = null;
+
+    fotosGrid.addEventListener('dragstart', function(e) {
+      dragged = e.target.closest('.foto-item');
+      if (!dragged) return;
+      dragged.classList.add('dragging');
+    });
+
+    fotosGrid.addEventListener('dragend', function() {
+      if (dragged) dragged.classList.remove('dragging');
+      fotosGrid.querySelectorAll('.foto-item').forEach(function(el) {
+        el.classList.remove('drag-over');
+      });
+      dragged = null;
+      atualizarOrdem();
+    });
+
+    fotosGrid.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      var target = e.target.closest('.foto-item');
+      if (!target || target === dragged) return;
+      fotosGrid.querySelectorAll('.foto-item').forEach(function(el) {
+        el.classList.remove('drag-over');
+      });
+      target.classList.add('drag-over');
+    });
+
+    fotosGrid.addEventListener('drop', function(e) {
+      e.preventDefault();
+      var target = e.target.closest('.foto-item');
+      if (!target || target === dragged) return;
+      // Insere o item arrastado antes ou depois do alvo
+      var items = Array.from(fotosGrid.querySelectorAll('.foto-item'));
+      var fromIdx = items.indexOf(dragged);
+      var toIdx   = items.indexOf(target);
+      if (fromIdx < toIdx) {
+        fotosGrid.insertBefore(dragged, target.nextSibling);
+      } else {
+        fotosGrid.insertBefore(dragged, target);
+      }
+    });
+
+    function atualizarOrdem() {
+      fotosGrid.querySelectorAll('.foto-item').forEach(function(item, i) {
+        var pk     = item.dataset.pk;
+        var hidden = item.querySelector('input[name="ordem_' + pk + '"]');
+        var badge  = item.querySelector('.foto-ordem-badge');
+        if (hidden) hidden.value = i;
+        if (badge)  badge.textContent = i + 1;
+      });
+    }
   }
 </script>
 

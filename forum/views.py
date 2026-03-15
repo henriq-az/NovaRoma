@@ -1,10 +1,22 @@
+import os
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
+from django.templatetags.static import static
 from .models import Produto, FotoProduto
 
 
 def index(request):
     produtos = Produto.objects.prefetch_related('fotos').all()
-    return render(request, 'index.html', {'produtos': produtos})
+
+    carrosel_dir = os.path.join(settings.BASE_DIR, 'static', 'images', 'carrosel')
+    carrosel_fotos = []
+    if os.path.exists(carrosel_dir):
+        extensoes = {'.jpg', '.jpeg', '.png', '.webp', '.gif'}
+        for fname in sorted(os.listdir(carrosel_dir)):
+            if os.path.splitext(fname)[1].lower() in extensoes:
+                carrosel_fotos.append(static(f'images/carrosel/{fname}'))
+
+    return render(request, 'index.html', {'produtos': produtos, 'carrosel_fotos': carrosel_fotos})
 
 
 def produto_detalhe(request, pk):
@@ -36,9 +48,18 @@ def adeeme_editar(request, pk):
         produto.preco = request.POST.get('preco', '0').replace(',', '.')
         produto.descricao = request.POST.get('descricao', '').strip()
         produto.save()
+
+        # Salva a nova ordem de cada foto
+        for foto in produto.fotos.all():
+            nova_ordem = request.POST.get(f'ordem_{foto.pk}')
+            if nova_ordem is not None:
+                foto.ordem = int(nova_ordem)
+                foto.save(update_fields=['ordem'])
+
         fotos_deletar = request.POST.getlist('deletar_foto')
         if fotos_deletar:
             FotoProduto.objects.filter(pk__in=fotos_deletar, produto=produto).delete()
+
         novas = request.FILES.getlist('fotos')
         offset = produto.fotos.count()
         for i, foto in enumerate(novas):

@@ -53,11 +53,50 @@ function subscribe() {
   }
 }
 
+/* ── POLAROID SLIDESHOW ──
+   As fotos são lidas automaticamente da pasta:
+   static/images/carrosel/
+   Basta adicionar imagens lá e reiniciar o servidor.
+   ─────────────────────────────────────────────── */
+function initPolaroid() {
+  var slidesEl = document.getElementById('polaroid-slides');
+  var dotsEl   = document.getElementById('polaroid-dots');
+  if (!slidesEl || !dotsEl) return;
+
+  var slides = slidesEl.querySelectorAll('.polaroid-slide');
+  if (slides.length <= 1) return; // nada a fazer com 0 ou 1 slide
+
+  var current = 0;
+
+  // Cria os dots
+  slides.forEach(function(_, i) {
+    var dot = document.createElement('button');
+    dot.className = 'polaroid-dot' + (i === 0 ? ' active' : '');
+    (function(n) {
+      dot.addEventListener('click', function() { goTo(n); });
+    })(i);
+    dotsEl.appendChild(dot);
+  });
+
+  var dots = dotsEl.querySelectorAll('.polaroid-dot');
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  setInterval(function() { goTo(current + 1); }, 3600);
+}
+
 /**
  * Inicialização geral da página
  */
 function init() {
   console.log('Nova Roma - Sistema carregado');
+  initPolaroid();
 
   // Fecha menu mobile ao clicar em links
   const mobileLinks = document.querySelectorAll('.mobile-menu a');

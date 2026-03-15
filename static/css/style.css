@@ -143,8 +143,12 @@ body {
 /* Hero direita */
 .hero-right {
   position: relative;
-  overflow: hidden;
   background: var(--brown-pale);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
 .hero-right-pattern {
@@ -169,22 +173,72 @@ body {
   background: var(--brown-dark);
 }
 
-.hero-shirt-wrap {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
+/* ── POLAROID SLIDESHOW ── */
+.hero-polaroid-wrap {
+  position: relative;
   z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 
-.shirt-mockup {
-  width: min(260px, 35vw);
-  filter: drop-shadow(0 28px 56px rgba(61,32,16,0.4));
-  animation: float 5s ease-in-out infinite;
+.polaroid {
+  width: min(720px, 42vw);
+  background: #fff;
+  padding: 16px 16px 56px;
+  border-radius: 2px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.12), 0 12px 40px rgba(0,0,0,0.28);
+  transform: rotate(-2deg);
+  transition: transform 0.4s ease;
 }
 
-@keyframes float {
-  0%,100% { transform: translateY(0) rotate(-1.5deg); }
-  50%      { transform: translateY(-16px) rotate(1.5deg); }
+.polaroid:hover { transform: rotate(0deg) scale(1.03); }
+
+.polaroid-slides {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #2a1a0e;
 }
+
+.polaroid-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.polaroid-slide.active { opacity: 1; }
+
+.polaroid-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.polaroid-label {
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #3B2209;
+  margin-top: 10px;
+}
+
+.polaroid-dots { display: flex; gap: 8px; align-items: center; }
+
+.polaroid-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(139,69,19,0.3);
+  border: none; cursor: pointer; padding: 0;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.polaroid-dot.active { background: #8B4513; transform: scale(1.5); }
 
 .hero-stamp {
   position: absolute;
