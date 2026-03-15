@@ -1,9 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir:*)",
-      "Bash(move:*)",
-      "Bash(tree:*)"
+      "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && .venv/Scripts/python.exe manage.py startapp forum 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && .venv/Scripts/python.exe manage.py makemigrations 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && .venv/Scripts/python.exe manage.py migrate 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && .venv/Scripts/python.exe manage.py check 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && python manage.py makemigrations && python manage.py migrate)",
+      "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && pip install Pillow -q && python manage.py makemigrations && python manage.py migrate)",
+      "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && pip install pillow-heif -q)",
+      "Bash(find:*)"
     ]
   }
 }

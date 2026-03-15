@@ -1,0 +1,261 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ produto.titulo }} — Nova Roma</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Economica:wght@400;700&family=Jost:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/components.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>
+  .detalhe-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 160px 5vw 100px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  /* Galeria */
+  .galeria-main {
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: var(--brown-pale);
+    position: relative;
+  }
+  .galeria-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s;
+  }
+  .galeria-main .sem-foto {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brown-light);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .galeria-thumbs {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+  }
+  .galeria-thumb {
+    width: 70px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.2s;
+    border: 1px solid transparent;
+  }
+  .galeria-thumb.ativo,
+  .galeria-thumb:hover {
+    opacity: 1;
+    border-color: var(--brown);
+  }
+
+  /* Info */
+  .detalhe-info {
+    padding-top: 0.5rem;
+  }
+  .detalhe-eyebrow {
+    font-family: 'Economica', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.35em;
+    color: var(--brown);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .detalhe-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 22px;
+    height: 1px;
+    background: var(--brown);
+  }
+  .detalhe-titulo {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+  }
+  .detalhe-preco {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--brown);
+    margin-bottom: 2rem;
+  }
+  .detalhe-sep {
+    width: 40px;
+    height: 1px;
+    background: var(--brown-light);
+    margin-bottom: 2rem;
+  }
+  .detalhe-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.85;
+    letter-spacing: 0.02em;
+    margin-bottom: 2.5rem;
+  }
+  .btn-carrinho {
+    width: 100%;
+    background: var(--brown-dark);
+    color: var(--white);
+    border: none;
+    padding: 18px;
+    font-family: 'Economica', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 1rem;
+  }
+  .btn-carrinho:hover { background: var(--brown); }
+  .voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    margin-top: 1rem;
+  }
+  .voltar:hover { color: var(--brown); }
+
+  @media (max-width: 900px) {
+    .detalhe-wrap {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      padding-top: 150px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="{% url 'index' %}" class="nav-logo-wrap">
+    <img src="{% static 'images/logo.png' %}" alt="Nova Roma" style="height:110px;">
+    <span class="logo-wordmark">NOVA <span>ROMA</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="{% url 'index' %}#colecao">Coleção</a></li>
+    <li><a href="{% url 'index' %}#sobre">Sobre</a></li>
+    <li><a href="{% url 'index' %}#contato">Contato</a></li>
+  </ul>
+  <button class="nav-cart" onclick="toggleCart()">
+    Carrinho
+    <span class="cart-count" id="cart-count">0</span>
+  </button>
+  <button class="menu-toggle" onclick="toggleMenu()" id="menu-toggle">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="{% url 'index' %}#colecao" onclick="toggleMenu()">Coleção</a></li>
+    <li><a href="{% url 'index' %}#sobre" onclick="toggleMenu()">Sobre</a></li>
+    <li><a href="{% url 'index' %}#contato" onclick="toggleMenu()">Contato</a></li>
+  </ul>
+  <button class="btn-primary mobile-cart-btn" onclick="toggleCart(); toggleMenu()">
+    Carrinho (<span id="mobile-cart-count">0</span>)
+  </button>
+</div>
+
+<div class="detalhe-wrap">
+  <!-- GALERIA -->
+  <div>
+    <div class="galeria-main" id="galeria-main">
+      {% with fotos=produto.fotos.all %}
+        {% if fotos %}
+          <img src="{{ fotos.0.foto.url }}" alt="{{ produto.titulo }}" id="foto-principal">
+        {% else %}
+          <div class="sem-foto">Sem foto</div>
+        {% endif %}
+      {% endwith %}
+    </div>
+    {% if produto.fotos.count > 1 %}
+    <div class="galeria-thumbs">
+      {% for foto in produto.fotos.all %}
+      <img src="{{ foto.foto.url }}"
+           class="galeria-thumb {% if forloop.first %}ativo{% endif %}"
+           onclick="trocarFoto(this, '{{ foto.foto.url }}')"
+           alt="Foto {{ forloop.counter }}">
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- INFO -->
+  <div class="detalhe-info">
+    <p class="detalhe-eyebrow">Nova Roma · Coleção Nosso Bairrismo</p>
+    <h1 class="detalhe-titulo">{{ produto.titulo }}</h1>
+    <p class="detalhe-preco">R$ {{ produto.preco }}</p>
+    <div class="detalhe-sep"></div>
+    {% if produto.descricao %}
+    <p class="detalhe-desc">{{ produto.descricao }}</p>
+    {% endif %}
+    <button class="btn-carrinho" onclick="add('{{ produto.titulo }}', '', {{ produto.preco }}); toggleCart()">
+      + Adicionar ao Carrinho
+    </button>
+    <a href="{% url 'index' %}#colecao" class="voltar">← Voltar à coleção</a>
+  </div>
+</div>
+
+<!-- CART -->
+<div class="cart-overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="sidebar">
+  <div class="cart-hdr">
+    <h3 class="cart-hdr-title">Carrinho</h3>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">Seu carrinho está vazio.</div>
+  </div>
+  <div class="cart-ftr" id="cart-ftr" style="display:none;">
+    <div class="cart-total">
+      <span>Total</span>
+      <span class="cart-total-val" id="cart-total">R$&nbsp;0,00</span>
+    </div>
+    <button class="btn-primary" style="width:100%;padding:16px;text-align:center;" onclick="checkout()">Finalizar Pedido</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="{% static 'js/carrinho.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script>
+  function trocarFoto(thumb, url) {
+    document.getElementById('foto-principal').src = url;
+    document.querySelectorAll('.galeria-thumb').forEach(function(t) { t.classList.remove('ativo'); });
+    thumb.classList.add('ativo');
+  }
+</script>
+</body>
+</html>
