@@ -178,6 +178,15 @@ O projeto é totalmente responsivo com breakpoint principal em 900px:
 - [ ] Zoom em imagens de produto
 - [ ] Mais variações de tamanho e cor
 
+## 🌿 Branches do Projeto
+
+O projeto possui **2 branches principais**:
+
+| Branch  | Descrição                                                  |
+|---------|------------------------------------------------------------|
+| `main`  | Branch principal — use esta para novos desenvolvimentos e PRs |
+| `master`| Branch legada — mantida apenas por histórico; não utilizar para novos commits |
+
 ## 📄 Licença
 
 © 2025 Nova Roma — Todos os direitos reservados
