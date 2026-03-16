@@ -158,32 +158,32 @@
 </div>
 
 <!-- COLEÇÃO -->
-<section class="section" id="colecao">
+<section class="section" id="colecao" style="background: #C49A6C;">
   <p class="section-eyebrow">Nova Coleção</p>
   <h2 class="section-title">Nosso Bairrismo</h2>
 
   <div class="products-grid" id="grid">
     {% for produto in produtos %}
-    <a class="product-card" href="{% url 'produto_detalhe' produto.pk %}" style="text-decoration:none;color:inherit;display:block;">
-      <div class="prod-bg" style="background:#f5f0ea;">
+    <a class="polaroid-product" href="{% url 'produto_detalhe' produto.pk %}">
+      <div class="polaroid-img-wrap">
         {% with foto=produto.fotos.first %}
           {% if foto %}
-            <img src="{{ foto.foto.url }}" alt="{{ produto.titulo }}" style="width:100%;height:100%;object-fit:cover;display:block;">
+            <img src="{{ foto.foto.url }}" alt="{{ produto.titulo }}">
           {% else %}
-            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#C49A6C;font-family:'Economica',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;">Sem foto</div>
+            <div class="polaroid-no-foto">Sem foto</div>
           {% endif %}
         {% endwith %}
+        <div class="polaroid-hover-btn">
+          <span class="prod-add">Ver Produto</span>
+        </div>
       </div>
-      <div class="prod-overlay">
-        <button class="prod-add" onclick="add('{{ produto.titulo }}', '', {{ produto.preco }})">+ Adicionar ao Carrinho</button>
-      </div>
-      <div class="prod-info">
+      <div class="polaroid-caption">
         <p class="prod-name">{{ produto.titulo }}</p>
         <p class="prod-price">R$&nbsp;{{ produto.preco }}</p>
       </div>
     </a>
     {% empty %}
-    <p style="color:var(--text-muted);font-size:0.9rem;letter-spacing:0.06em;padding:2rem 0;">Nenhum produto cadastrado ainda.</p>
+    <p style="color:#fff;font-size:0.9rem;letter-spacing:0.06em;padding:2rem 0;">Nenhum produto cadastrado ainda.</p>
     {% endfor %}
   </div>
 </section>
@@ -286,8 +286,13 @@
 <!-- Splash -->
 <script>
   window.addEventListener('DOMContentLoaded', function () {
+    var splash = document.getElementById('splash');
+    if (sessionStorage.getItem('splashShown')) {
+      splash.style.display = 'none';
+      return;
+    }
+    sessionStorage.setItem('splashShown', '1');
     setTimeout(function () {
-      var splash = document.getElementById('splash');
       splash.classList.add('hide');
       splash.addEventListener('transitionend', function () {
         splash.style.display = 'none';

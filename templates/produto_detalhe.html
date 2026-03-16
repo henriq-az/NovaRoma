@@ -131,6 +131,44 @@
     margin-bottom: 1rem;
   }
   .btn-carrinho:hover { background: var(--brown); }
+
+  /* Tamanhos */
+  .tamanhos-label {
+    font-family: 'Economica', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+  .tamanhos-grid {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .tam-btn {
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(26,23,20,0.2);
+    background: transparent;
+    font-family: 'Economica', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tam-btn:hover {
+    border-color: var(--brown);
+    color: var(--brown);
+  }
+  .tam-btn.selecionado {
+    background: var(--brown-dark);
+    border-color: var(--brown-dark);
+    color: #fff;
+  }
   .voltar {
     display: inline-flex;
     align-items: center;
@@ -221,7 +259,14 @@
     {% if produto.descricao %}
     <p class="detalhe-desc">{{ produto.descricao }}</p>
     {% endif %}
-    <button class="btn-carrinho" onclick="add('{{ produto.titulo }}', '', {{ produto.preco }}); toggleCart()">
+    <p class="tamanhos-label">Selecione o tamanho</p>
+    <div class="tamanhos-grid" id="tamanhos">
+      <button class="tam-btn" onclick="selecionarTam(this)">PP</button>
+      <button class="tam-btn" onclick="selecionarTam(this)">P</button>
+      <button class="tam-btn" onclick="selecionarTam(this)">M</button>
+      <button class="tam-btn" onclick="selecionarTam(this)">G</button>
+    </div>
+    <button class="btn-carrinho" onclick="adicionarComTamanho('{{ produto.titulo }}', {{ produto.preco }})">
       + Adicionar ao Carrinho
     </button>
     <a href="{% url 'index' %}#colecao" class="voltar">← Voltar à coleção</a>
@@ -251,6 +296,27 @@
 <script src="{% static 'js/carrinho.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
 <script>
+  function selecionarTam(btn) {
+    document.querySelectorAll('.tam-btn').forEach(function(b) { b.classList.remove('selecionado'); });
+    btn.classList.add('selecionado');
+  }
+
+  function adicionarComTamanho(titulo, preco) {
+    var selecionado = document.querySelector('.tam-btn.selecionado');
+    if (!selecionado) {
+      var label = document.querySelector('.tamanhos-label');
+      label.style.color = '#CC0000';
+      label.textContent = 'Selecione um tamanho';
+      setTimeout(function() {
+        label.style.color = '';
+        label.textContent = 'Selecione o tamanho';
+      }, 2000);
+      return;
+    }
+    add(titulo + ' (' + selecionado.textContent + ')', '', preco);
+    toggleCart();
+  }
+
   function trocarFoto(thumb, url) {
     document.getElementById('foto-principal').src = url;
     document.querySelectorAll('.galeria-thumb').forEach(function(t) { t.classList.remove('ativo'); });
