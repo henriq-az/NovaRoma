@@ -99,16 +99,31 @@
 <section class="hero">
   <div class="hero-left">
     <p class="hero-eyebrow">Streetwear · Recife · Pernambuco</p>
+
+    <!-- POLAROID MOBILE ONLY -->
+    <div class="hero-mobile-polaroid">
+      <div class="polaroid">
+        <div class="polaroid-slides" id="polaroid-slides-mobile">
+          {% for foto in carrosel_fotos %}
+          <div class="polaroid-slide {% if forloop.first %}active{% endif %}" style="background:#2a1a0e;">
+            <img src="{{ foto }}" alt="Nova Roma">
+          </div>
+          {% empty %}
+          <div class="polaroid-slide active" style="background:#2a1a0e;display:flex;align-items:center;justify-content:center;">
+            <span style="color:rgba(196,154,108,0.4);font-family:'Economica',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-align:center;">ADICIONE FOTOS EM<br>static/images/carrosel/</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="polaroid-dots" id="polaroid-dots-mobile"></div>
+    </div>
+
     <h1 class="hero-title">
       <span class="outline">CRIADO POR</span>
       <span class="brown">TORCEDORES</span>
       USADO POR TORCEDORES
     </h1>
     <p class="hero-desc">Moda streetwear que carrega a alma dos maiores clubes de Pernambuco. Do Recife para o mundo, com a garra do futebol nordestino em cada detalhe.</p>
-    <div class="hero-ctas">
-      <a href="#colecao" class="btn-primary">Ver Coleção</a>
-      <a href="#clubes" class="btn-ghost">Seu Clube</a>
-    </div>
     <div class="scroll-hint">
       <span class="scroll-line"></span>
       Scroll

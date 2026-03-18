@@ -5,191 +5,477 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ produto.titulo }} — Nova Roma</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Economica:wght@400;700&family=Jost:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=DM+Serif+Display&family=Economica:wght@400;700&family=Jost:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/components.css' %}">
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <style>
-  .detalhe-wrap {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 160px 5vw 100px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: start;
-  }
 
-  /* Galeria */
-  .galeria-main {
-    width: 100%;
-    aspect-ratio: 3/4;
-    overflow: hidden;
-    background: var(--brown-pale);
+/* ── PAGE SHELL ── */
+.pd-page {
+  display: grid;
+  grid-template-columns: 64px 1fr 1fr;
+  min-height: 100vh;
+  padding-top: 130px;
+}
+
+/* ── THUMB STRIP ── */
+.pd-thumbstrip {
+  background: var(--white);
+  border-right: 1px solid rgba(107,63,31,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0;
+  gap: 6px;
+  position: sticky;
+  top: 130px;
+  height: calc(100vh - 130px);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.pd-thumbstrip::-webkit-scrollbar { display: none; }
+
+.pd-thumb {
+  width: 44px;
+  height: 52px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.22s, transform 0.22s;
+  border: 1px solid transparent;
+  flex-shrink: 0;
+  display: block;
+}
+.pd-thumb.ativo,
+.pd-thumb:hover {
+  opacity: 1;
+  border-color: var(--brown);
+  transform: scaleX(1.05);
+}
+
+/* ── GALERIA ── */
+.pd-gallery {
+  position: sticky;
+  top: 130px;
+  height: calc(100vh - 130px);
+  overflow: hidden;
+  background: var(--brown-pale);
+}
+
+.pd-gallery-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.pd-gallery-img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.55s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+}
+.pd-gallery-img.ativo {
+  opacity: 1;
+  pointer-events: auto;
+}
+.pd-gallery-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+/* grain overlay */
+.pd-gallery-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* collection badge */
+.pd-badge {
+  position: absolute;
+  top: 28px;
+  left: 22px;
+  z-index: 5;
+  font-family: 'Economica', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--brown-pale);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  opacity: 0.75;
+}
+
+/* arrow nav */
+.pd-arrow {
+  position: absolute;
+  bottom: 24px;
+  z-index: 5;
+  background: rgba(61,32,16,0.72);
+  color: var(--brown-pale);
+  border: none;
+  width: 38px;
+  height: 38px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  backdrop-filter: blur(6px);
+}
+.pd-arrow:hover { background: var(--brown-dark); }
+.pd-arrow-prev { right: 50px; }
+.pd-arrow-next { right: 8px; }
+
+/* ── INFO PANEL ── */
+.pd-info {
+  padding: 60px 8vw 80px 5vw;
+  background: var(--white);
+  border-left: 1px solid rgba(107,63,31,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: pd-reveal 0.8s cubic-bezier(0.4,0,0.2,1) both;
+  animation-delay: 0.1s;
+}
+
+@keyframes pd-reveal {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pd-eyebrow {
+  font-family: 'Economica', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.38em;
+  color: var(--brown);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.4rem;
+  animation: pd-reveal 0.7s ease both;
+  animation-delay: 0.15s;
+}
+.pd-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 22px; height: 1px;
+  background: var(--brown);
+  flex-shrink: 0;
+}
+
+.pd-titulo {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+  line-height: 1;
+  color: var(--text-dark);
+  margin-bottom: 1.8rem;
+  animation: pd-reveal 0.7s ease both;
+  animation-delay: 0.2s;
+}
+
+.pd-preco-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 2.2rem;
+  animation: pd-reveal 0.7s ease both;
+  animation-delay: 0.25s;
+}
+.pd-preco-label {
+  font-family: 'Economica', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.pd-preco {
+  font-family: 'Jost', sans-serif;
+  font-weight: 900;
+  font-size: 2rem;
+  color: var(--brown-dark);
+  letter-spacing: -0.01em;
+}
+
+.pd-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, rgba(107,63,31,0.2), transparent);
+  margin-bottom: 2.2rem;
+}
+
+.pd-desc {
+  font-size: 0.97rem;
+  color: var(--text-muted);
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+  margin-bottom: 2.4rem;
+  animation: pd-reveal 0.7s ease both;
+  animation-delay: 0.3s;
+}
+
+/* ── TAMANHOS ── */
+.pd-tam-label {
+  font-family: 'Economica', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  animation: pd-reveal 0.7s ease both;
+  animation-delay: 0.35s;
+}
+.pd-tam-label.erro { color: #CC0000; }
+
+.pd-tamanhos {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 2.6rem;
+  animation: pd-reveal 0.7s ease both;
+  animation-delay: 0.4s;
+}
+
+.pd-tam {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  background: transparent;
+  border: 1px solid rgba(26,23,20,0.18);
+  font-family: 'Jost', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  overflow: hidden;
+}
+.pd-tam::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  width: 0; height: 2px;
+  background: var(--brown);
+  transition: width 0.25s, left 0.25s;
+}
+.pd-tam:hover {
+  border-color: var(--brown);
+  color: var(--brown);
+}
+.pd-tam:hover::after {
+  width: 60%; left: 20%;
+}
+.pd-tam.selecionado {
+  background: var(--brown-dark);
+  border-color: var(--brown-dark);
+  color: #fff;
+}
+.pd-tam.selecionado::after {
+  display: none;
+}
+
+/* ── CTA ── */
+.pd-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: pd-reveal 0.7s ease both;
+  animation-delay: 0.45s;
+}
+
+.pd-btn-cart {
+  position: relative;
+  overflow: hidden;
+  background: var(--brown-dark);
+  color: var(--white);
+  border: none;
+  padding: 18px 24px;
+  font-family: 'Economica', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.pd-btn-cart::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--brown);
+  transform: translateX(-101%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  z-index: 0;
+}
+.pd-btn-cart:hover::before { transform: translateX(0); }
+.pd-btn-cart span { position: relative; z-index: 1; }
+
+.pd-btn-cart .cart-icon {
+  position: relative; z-index: 1;
+  width: 16px; height: 16px;
+  display: inline-block;
+}
+
+.pd-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Economica', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  width: fit-content;
+  margin-top: 0.5rem;
+}
+.pd-voltar:hover { color: var(--brown); }
+.pd-voltar::before {
+  content: '';
+  display: inline-block;
+  width: 18px; height: 1px;
+  background: currentColor;
+  transition: width 0.2s;
+}
+.pd-voltar:hover::before { width: 28px; }
+
+/* ── DETAIL STRIP ── */
+.pd-detalhes {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(107,63,31,0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem 2rem;
+  animation: pd-reveal 0.7s ease both;
+  animation-delay: 0.5s;
+}
+.pd-det-item { }
+.pd-det-label {
+  font-family: 'Economica', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 3px;
+}
+.pd-det-val {
+  font-family: 'Jost', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--text-dark);
+}
+
+/* ── CURSOR ZOOM ── */
+.pd-gallery-inner { cursor: zoom-in; }
+
+/* ── LIGHTBOX ── */
+.lb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,7,5,0.94);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.lb-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.lb-img {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+}
+.lb-close {
+  position: fixed;
+  top: 20px; right: 24px;
+  background: none;
+  border: none;
+  color: rgba(240,228,208,0.8);
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s;
+  z-index: 501;
+}
+.lb-close:hover { color: #fff; }
+.lb-arrow {
+  position: fixed;
+  top: 50%; transform: translateY(-50%);
+  background: rgba(61,32,16,0.6);
+  color: var(--brown-pale);
+  border: none;
+  width: 46px; height: 46px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+  z-index: 501;
+  backdrop-filter: blur(4px);
+}
+.lb-arrow:hover { background: var(--brown-dark); }
+.lb-arrow-prev { left: 16px; }
+.lb-arrow-next { right: 16px; }
+.lb-counter {
+  position: fixed;
+  bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Economica', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(240,228,208,0.6);
+  z-index: 501;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 900px) {
+  .pd-page {
+    grid-template-columns: 1fr;
+    padding-top: 130px;
+  }
+  .pd-thumbstrip { display: none; }
+  .pd-gallery {
     position: relative;
+    top: 0;
+    height: 75vw;
+    max-height: 480px;
   }
-  .galeria-main img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: opacity 0.3s;
+  .pd-info {
+    padding: 40px 5vw 80px;
+    border-left: none;
+    border-top: 1px solid rgba(107,63,31,0.08);
   }
-  .galeria-main .sem-foto {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--brown-light);
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-  .galeria-thumbs {
-    display: flex;
-    gap: 4px;
-    margin-top: 4px;
-  }
-  .galeria-thumb {
-    width: 70px;
-    aspect-ratio: 1;
-    object-fit: cover;
-    cursor: pointer;
-    opacity: 0.55;
-    transition: opacity 0.2s;
-    border: 1px solid transparent;
-  }
-  .galeria-thumb.ativo,
-  .galeria-thumb:hover {
-    opacity: 1;
-    border-color: var(--brown);
-  }
+  .pd-titulo { font-size: clamp(1.8rem, 7vw, 2.8rem); }
+  .pd-detalhes { grid-template-columns: 1fr; }
+}
 
-  /* Info */
-  .detalhe-info {
-    padding-top: 0.5rem;
-  }
-  .detalhe-eyebrow {
-    font-family: 'Economica', sans-serif;
-    font-size: 0.62rem;
-    letter-spacing: 0.35em;
-    color: var(--brown);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .detalhe-eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 22px;
-    height: 1px;
-    background: var(--brown);
-  }
-  .detalhe-titulo {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 900;
-    line-height: 1;
-    color: var(--text-dark);
-    margin-bottom: 1.5rem;
-  }
-  .detalhe-preco {
-    font-family: 'Jost', sans-serif;
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: var(--brown);
-    margin-bottom: 2rem;
-  }
-  .detalhe-sep {
-    width: 40px;
-    height: 1px;
-    background: var(--brown-light);
-    margin-bottom: 2rem;
-  }
-  .detalhe-desc {
-    font-size: 1rem;
-    color: var(--text-muted);
-    line-height: 1.85;
-    letter-spacing: 0.02em;
-    margin-bottom: 2.5rem;
-  }
-  .btn-carrinho {
-    width: 100%;
-    background: var(--brown-dark);
-    color: var(--white);
-    border: none;
-    padding: 18px;
-    font-family: 'Economica', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-bottom: 1rem;
-  }
-  .btn-carrinho:hover { background: var(--brown); }
-
-  /* Tamanhos */
-  .tamanhos-label {
-    font-family: 'Economica', sans-serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 0.75rem;
-  }
-  .tamanhos-grid {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-  }
-  .tam-btn {
-    width: 48px;
-    height: 48px;
-    border: 1px solid rgba(26,23,20,0.2);
-    background: transparent;
-    font-family: 'Economica', sans-serif;
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    color: var(--text-dark);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .tam-btn:hover {
-    border-color: var(--brown);
-    color: var(--brown);
-  }
-  .tam-btn.selecionado {
-    background: var(--brown-dark);
-    border-color: var(--brown-dark);
-    color: #fff;
-  }
-  .voltar {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.68rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-    margin-top: 1rem;
-  }
-  .voltar:hover { color: var(--brown); }
-
-  @media (max-width: 900px) {
-    .detalhe-wrap {
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
-      padding-top: 150px;
-    }
-  }
 </style>
 </head>
 <body>
@@ -226,51 +512,114 @@
   </button>
 </div>
 
-<div class="detalhe-wrap">
-  <!-- GALERIA -->
-  <div>
-    <div class="galeria-main" id="galeria-main">
+<!-- PRODUCT PAGE -->
+<div class="pd-page">
+
+  <!-- THUMB STRIP -->
+  <div class="pd-thumbstrip" id="pd-thumbstrip">
+    {% for foto in produto.fotos.all %}
+    <img
+      src="{{ foto.foto.url }}"
+      class="pd-thumb {% if forloop.first %}ativo{% endif %}"
+      data-idx="{{ forloop.counter0 }}"
+      onclick="irParaFoto({{ forloop.counter0 }}, this)"
+      alt="Foto {{ forloop.counter }}"
+    >
+    {% endfor %}
+  </div>
+
+  <!-- GALLERY -->
+  <div class="pd-gallery">
+    <div class="pd-gallery-inner" id="pd-gallery-inner">
+
       {% with fotos=produto.fotos.all %}
         {% if fotos %}
-          <img src="{{ fotos.0.foto.url }}" alt="{{ produto.titulo }}" id="foto-principal">
+          {% for foto in fotos %}
+          <div class="pd-gallery-img {% if forloop.first %}ativo{% endif %}" data-idx="{{ forloop.counter0 }}">
+            <img src="{{ foto.foto.url }}" alt="{{ produto.titulo }}">
+          </div>
+          {% endfor %}
         {% else %}
-          <div class="sem-foto">Sem foto</div>
+          <div class="pd-gallery-img ativo">
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--brown-light);font-family:'Economica',sans-serif;font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;">
+              Sem foto
+            </div>
+          </div>
         {% endif %}
       {% endwith %}
+
+      <div class="pd-gallery-grain"></div>
+      <span class="pd-badge">Nova Roma · Coleção Nosso Bairrismo</span>
+
+      {% if produto.fotos.count > 1 %}
+      <button class="pd-arrow pd-arrow-prev" onclick="navFoto(-1)" aria-label="Anterior">&#8592;</button>
+      <button class="pd-arrow pd-arrow-next" onclick="navFoto(1)" aria-label="Próxima">&#8594;</button>
+      {% endif %}
     </div>
-    {% if produto.fotos.count > 1 %}
-    <div class="galeria-thumbs">
-      {% for foto in produto.fotos.all %}
-      <img src="{{ foto.foto.url }}"
-           class="galeria-thumb {% if forloop.first %}ativo{% endif %}"
-           onclick="trocarFoto(this, '{{ foto.foto.url }}')"
-           alt="Foto {{ forloop.counter }}">
-      {% endfor %}
-    </div>
-    {% endif %}
   </div>
 
   <!-- INFO -->
-  <div class="detalhe-info">
-    <p class="detalhe-eyebrow">Nova Roma · Coleção Nosso Bairrismo</p>
-    <h1 class="detalhe-titulo">{{ produto.titulo }}</h1>
-    <p class="detalhe-preco">R$ {{ produto.preco }}</p>
-    <div class="detalhe-sep"></div>
-    {% if produto.descricao %}
-    <p class="detalhe-desc">{{ produto.descricao }}</p>
-    {% endif %}
-    <p class="tamanhos-label">Selecione o tamanho</p>
-    <div class="tamanhos-grid" id="tamanhos">
-      <button class="tam-btn" onclick="selecionarTam(this)">PP</button>
-      <button class="tam-btn" onclick="selecionarTam(this)">P</button>
-      <button class="tam-btn" onclick="selecionarTam(this)">M</button>
-      <button class="tam-btn" onclick="selecionarTam(this)">G</button>
+  <div class="pd-info">
+    <p class="pd-eyebrow">Nova Roma · Streetwear Pernambucano</p>
+    <h1 class="pd-titulo">{{ produto.titulo }}</h1>
+
+    <div class="pd-preco-wrap">
+      <span class="pd-preco-label">Preço</span>
+      <span class="pd-preco">R$&nbsp;{{ produto.preco }}</span>
     </div>
-    <button class="btn-carrinho" onclick="adicionarComTamanho('{{ produto.titulo }}', {{ produto.preco }})">
-      + Adicionar ao Carrinho
-    </button>
-    <a href="{% url 'index' %}#colecao" class="voltar">← Voltar à coleção</a>
+
+    <div class="pd-divider"></div>
+
+    {% if produto.descricao %}
+    <p class="pd-desc">{{ produto.descricao }}</p>
+    {% endif %}
+
+    <p class="pd-tam-label" id="pd-tam-label">Selecione o tamanho</p>
+    <div class="pd-tamanhos" id="pd-tamanhos">
+      <button class="pd-tam" onclick="selecionarTam(this)">PP</button>
+      <button class="pd-tam" onclick="selecionarTam(this)">P</button>
+      <button class="pd-tam" onclick="selecionarTam(this)">M</button>
+      <button class="pd-tam" onclick="selecionarTam(this)">G</button>
+      <button class="pd-tam" onclick="selecionarTam(this)">GG</button>
+      <button class="pd-tam" onclick="selecionarTam(this)">XG</button>
+    </div>
+
+    <div class="pd-cta">
+      <button class="pd-btn-cart" onclick="adicionarComTamanho('{{ produto.titulo }}', {{ produto.preco }})">
+        <span>+ Adicionar ao Carrinho</span>
+      </button>
+      <a href="{% url 'index' %}#colecao" class="pd-voltar">Voltar à coleção</a>
+    </div>
+
+    <div class="pd-detalhes">
+      <div class="pd-det-item">
+        <span class="pd-det-label">Marca</span>
+        <span class="pd-det-val">Nova Roma</span>
+      </div>
+      <div class="pd-det-item">
+        <span class="pd-det-label">Origem</span>
+        <span class="pd-det-val">Recife, PE</span>
+      </div>
+      <div class="pd-det-item">
+        <span class="pd-det-label">Material</span>
+        <span class="pd-det-val">100% Algodão</span>
+      </div>
+      <div class="pd-det-item">
+        <span class="pd-det-label">Coleção</span>
+        <span class="pd-det-val">Nosso Bairrismo</span>
+      </div>
+    </div>
   </div>
+
+</div><!-- /.pd-page -->
+
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lb-overlay" onclick="lbFechar(event)">
+  <button class="lb-close" onclick="lbFechar()">✕</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+  <button class="lb-arrow lb-arrow-prev" onclick="lbNav(-1, event)">&#8592;</button>
+  <button class="lb-arrow lb-arrow-next" onclick="lbNav(1, event)">&#8594;</button>
+  <span class="lb-counter" id="lb-counter"></span>
 </div>
 
 <!-- CART -->
@@ -296,19 +645,39 @@
 <script src="{% static 'js/carrinho.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
 <script>
+  var totalFotos = document.querySelectorAll('.pd-gallery-img').length;
+  var fotoAtual = 0;
+
+  function irParaFoto(idx, thumbEl) {
+    document.querySelectorAll('.pd-gallery-img').forEach(function(el) { el.classList.remove('ativo'); });
+    var alvo = document.querySelector('.pd-gallery-img[data-idx="' + idx + '"]');
+    if (alvo) alvo.classList.add('ativo');
+
+    document.querySelectorAll('.pd-thumb').forEach(function(t) { t.classList.remove('ativo'); });
+    if (thumbEl) thumbEl.classList.add('ativo');
+
+    fotoAtual = idx;
+  }
+
+  function navFoto(dir) {
+    var proximo = (fotoAtual + dir + totalFotos) % totalFotos;
+    var thumbAlvo = document.querySelector('.pd-thumb[data-idx="' + proximo + '"]');
+    irParaFoto(proximo, thumbAlvo);
+  }
+
   function selecionarTam(btn) {
-    document.querySelectorAll('.tam-btn').forEach(function(b) { b.classList.remove('selecionado'); });
+    document.querySelectorAll('.pd-tam').forEach(function(b) { b.classList.remove('selecionado'); });
     btn.classList.add('selecionado');
   }
 
   function adicionarComTamanho(titulo, preco) {
-    var selecionado = document.querySelector('.tam-btn.selecionado');
+    var selecionado = document.querySelector('.pd-tam.selecionado');
+    var label = document.getElementById('pd-tam-label');
     if (!selecionado) {
-      var label = document.querySelector('.tamanhos-label');
-      label.style.color = '#CC0000';
+      label.classList.add('erro');
       label.textContent = 'Selecione um tamanho';
       setTimeout(function() {
-        label.style.color = '';
+        label.classList.remove('erro');
         label.textContent = 'Selecione o tamanho';
       }, 2000);
       return;
@@ -317,10 +686,53 @@
     toggleCart();
   }
 
-  function trocarFoto(thumb, url) {
-    document.getElementById('foto-principal').src = url;
-    document.querySelectorAll('.galeria-thumb').forEach(function(t) { t.classList.remove('ativo'); });
-    thumb.classList.add('ativo');
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft')  { navFoto(-1); lbNav(-1); }
+    if (e.key === 'ArrowRight') { navFoto(1);  lbNav(1);  }
+    if (e.key === 'Escape') lbFechar();
+  });
+
+  // Abre lightbox ao clicar na galeria
+  document.getElementById('pd-gallery-inner').addEventListener('click', function(e) {
+    if (e.target.closest('.pd-arrow')) return;
+    lbAbrir();
+  });
+
+  var lbSrcs = [];
+  (function() {
+    document.querySelectorAll('.pd-gallery-img img').forEach(function(img) {
+      lbSrcs.push(img.src);
+    });
+  })();
+
+  function lbAbrir() {
+    if (!lbSrcs.length) return;
+    lbSync();
+    document.getElementById('lb-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function lbFechar(e) {
+    if (e && e.target !== document.getElementById('lb-overlay') && !e.target.classList.contains('lb-close')) return;
+    document.getElementById('lb-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function lbNav(dir, e) {
+    if (e) e.stopPropagation();
+    var proximo = (fotoAtual + dir + totalFotos) % totalFotos;
+    var thumbAlvo = document.querySelector('.pd-thumb[data-idx="' + proximo + '"]');
+    irParaFoto(proximo, thumbAlvo);
+    lbSync();
+  }
+
+  function lbSync() {
+    if (!lbSrcs[fotoAtual]) return;
+    document.getElementById('lb-img').src = lbSrcs[fotoAtual];
+    if (totalFotos > 1) {
+      document.getElementById('lb-counter').textContent = (fotoAtual + 1) + ' / ' + totalFotos;
+    }
   }
 </script>
 </body>

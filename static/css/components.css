@@ -621,3 +621,21 @@ nav {
   margin-top: 2rem;
   width: 100%;
 }
+
+/* ── MOBILE ── */
+@media (max-width: 900px) {
+  nav {
+    height: 95px;
+    padding: 0 4vw;
+  }
+  .nav-logo-wrap img {
+    height: 82px !important;
+  }
+  .logo-wordmark {
+    font-size: 1.8rem;
+  }
+  .mobile-menu {
+    top: 95px;
+    height: calc(100vh - 95px);
+  }
+}

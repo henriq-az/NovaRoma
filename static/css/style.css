@@ -93,7 +93,7 @@ body {
 }
 
 .hero-title .outline {
-  color: var(--text-dark);
+  color: var(--brown);
   display: block;
 }
 
@@ -726,19 +726,158 @@ footer {
   color: var(--brown-light);
 }
 
+/* ── POLAROID MOBILE ── */
+.hero-mobile-polaroid {
+  display: none;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; }
+
+  /* Hero */
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 95px;
+    min-height: 100svh;
+  }
   .hero-right { display: none; }
-  .hero-left { padding: 80px 5vw 80px; }
+  .hero-left {
+    padding: 12px 6vw 64px;
+    justify-content: center;
+  }
+  .hero-eyebrow {
+    margin-bottom: 0.3rem;
+  }
   .hero-left::after { display: none; }
-  .clubs-grid { grid-template-columns: 1fr; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-  .manifesto { grid-template-columns: 1fr; }
+  .hero-title {
+    font-size: clamp(2.2rem, 11vw, 3.4rem);
+    margin-bottom: 1.4rem;
+  }
+  .hero-desc {
+    font-size: 0.95rem;
+    max-width: 100%;
+    margin-bottom: 2rem;
+  }
+  .hero-ctas {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .hero-ctas .btn-primary,
+  .hero-ctas .btn-ghost {
+    width: 100%;
+    text-align: center;
+    padding: 16px 24px;
+  }
+  .scroll-hint { display: none; }
+  .hero-mobile-polaroid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1.5rem -6vw 2rem;
+    width: calc(100% + 12vw);
+    position: relative;
+  }
+  .hero-mobile-polaroid .polaroid {
+    width: 100%;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    transform: none !important;
+    transition: none;
+  }
+  .hero-mobile-polaroid .polaroid:hover {
+    transform: none !important;
+    box-shadow: none;
+  }
+  .hero-mobile-polaroid .polaroid-slides {
+    height: 80vw;
+    position: relative;
+  }
+  .hero-mobile-polaroid .polaroid-slides::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 45%;
+    background: linear-gradient(transparent, rgba(26,23,20,0.65));
+    z-index: 2;
+    pointer-events: none;
+  }
+  .hero-mobile-polaroid .polaroid-dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+  }
+  .hero-mobile-polaroid .polaroid-dot {
+    background: rgba(255,255,255,0.45);
+  }
+  .hero-mobile-polaroid .polaroid-dot.active {
+    background: #fff;
+    transform: scale(1.5);
+  }
+
+  /* Sections */
+  .section { padding: 56px 5vw; }
+  .section-title {
+    font-size: clamp(1.7rem, 8vw, 2.6rem);
+    margin-bottom: 2rem;
+  }
+
+  /* Produtos */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin: 0;
+  }
+  .polaroid-product,
+  .polaroid-product:nth-child(2),
+  .polaroid-product:nth-child(3) {
+    transform: none !important;
+  }
+  .polaroid-product:hover { transform: scale(1.02) !important; }
+  .polaroid-caption .prod-name { font-size: 1.3rem; }
+
+  /* Manifesto */
+  .manifesto {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 56px 5vw;
+  }
   .manifesto-visual { display: none; }
+  .manifesto-quote { font-size: 1.15rem; }
+
+  /* Newsletter */
+  .newsletter { padding: 56px 5vw; }
+  .nl-form { flex-direction: column; max-width: 100%; }
+  .nl-input {
+    border-right: 1px solid rgba(196,154,108,0.3);
+    border-bottom: none;
+  }
+  .nl-btn { width: 100%; padding: 15px; }
+
+  /* Clubs */
+  .clubs-grid { grid-template-columns: 1fr; }
+
+  /* Footer */
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+
+  /* Nav / Cart */
   .nav-links { display: none; }
-  .nav-cart { display: none; }
+  .nav-cart  { display: none; }
   .menu-toggle { display: flex; }
   .cart-sidebar { width: 100%; right: -100%; }
   .cart-sidebar.open { right: 0; }
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .footer-top { grid-template-columns: 1fr; }
+  .hero-title { font-size: clamp(2rem, 12vw, 3rem); }
 }

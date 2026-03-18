@@ -58,17 +58,16 @@ function subscribe() {
    static/images/carrosel/
    Basta adicionar imagens lá e reiniciar o servidor.
    ─────────────────────────────────────────────── */
-function initPolaroid() {
-  var slidesEl = document.getElementById('polaroid-slides');
-  var dotsEl   = document.getElementById('polaroid-dots');
+function initPolaroidById(slidesId, dotsId) {
+  var slidesEl = document.getElementById(slidesId);
+  var dotsEl   = document.getElementById(dotsId);
   if (!slidesEl || !dotsEl) return;
 
   var slides = slidesEl.querySelectorAll('.polaroid-slide');
-  if (slides.length <= 1) return; // nada a fazer com 0 ou 1 slide
+  if (slides.length <= 1) return;
 
   var current = 0;
 
-  // Cria os dots
   slides.forEach(function(_, i) {
     var dot = document.createElement('button');
     dot.className = 'polaroid-dot' + (i === 0 ? ' active' : '');
@@ -89,6 +88,11 @@ function initPolaroid() {
   }
 
   setInterval(function() { goTo(current + 1); }, 3600);
+}
+
+function initPolaroid() {
+  initPolaroidById('polaroid-slides', 'polaroid-dots');
+  initPolaroidById('polaroid-slides-mobile', 'polaroid-dots-mobile');
 }
 
 /**
