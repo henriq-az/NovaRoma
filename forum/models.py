@@ -70,3 +70,20 @@ class FotoProduto(models.Model):
 
     class Meta:
         ordering = ['ordem', 'id']
+
+
+class EstoqueItem(models.Model):
+    TAMANHOS = [
+        ('PP', 'PP'), ('P', 'P'), ('M', 'M'),
+        ('G', 'G'), ('GG', 'GG'), ('XG', 'XG'),
+    ]
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='estoque')
+    tamanho = models.CharField(max_length=5, choices=TAMANHOS)
+    quantidade = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ('produto', 'tamanho')
+        ordering = ['tamanho']
+
+    def __str__(self):
+        return f'{self.produto} — {self.tamanho}: {self.quantidade}'

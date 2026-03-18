@@ -211,6 +211,7 @@
         {% endif %}
         <div class="produto-actions">
           <a href="{% url 'adeeme_editar' produto.pk %}" class="btn-edit">Editar</a>
+          <a href="{% url 'adeeme_estoque' produto.pk %}" class="btn-edit">Estoque</a>
           <form method="post" action="{% url 'adeeme_deletar' produto.pk %}" onsubmit="return confirm('Deletar {{ produto.titulo }}?')">
             {% csrf_token %}
             <button type="submit" class="btn-danger">Deletar</button>

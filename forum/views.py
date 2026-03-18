@@ -2,7 +2,7 @@ import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.templatetags.static import static
-from .models import Produto, FotoProduto
+from .models import Produto, FotoProduto, EstoqueItem
 
 
 def index(request):
@@ -72,3 +72,35 @@ def adeeme_deletar(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     produto.delete()
     return redirect('adeeme')
+
+
+def adeeme_estoque(request, pk):
+    produto = get_object_or_404(Produto, pk=pk)
+    tamanhos = ['PP', 'P', 'M', 'G', 'GG', 'XG']
+
+    # Garante que existe um EstoqueItem para cada tamanho
+    for t in tamanhos:
+        EstoqueItem.objects.get_or_create(produto=produto, tamanho=t)
+
+    if request.method == 'POST':
+        acao = request.POST.get('acao')  # 'entrada' ou 'saida'
+        for t in tamanhos:
+            val = request.POST.get(f'qty_{t}', '').strip()
+            if not val:
+                continue
+            try:
+                qty = int(val)
+            except ValueError:
+                continue
+            if qty <= 0:
+                continue
+            item = EstoqueItem.objects.get(produto=produto, tamanho=t)
+            if acao == 'entrada':
+                item.quantidade += qty
+            elif acao == 'saida':
+                item.quantidade = max(0, item.quantidade - qty)
+            item.save()
+        return redirect('adeeme_estoque', pk=pk)
+
+    itens = produto.estoque.all()
+    return render(request, 'adeeme/estoque.html', {'produto': produto, 'itens': itens})
