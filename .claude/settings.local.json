@@ -8,7 +8,25 @@
       "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && python manage.py makemigrations && python manage.py migrate)",
       "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && pip install Pillow -q && python manage.py makemigrations && python manage.py migrate)",
       "Bash(cd \"C:\\\\Users\\\\calad\\\\OneDrive\\\\Desktop\\\\NovaRoma\" && pip install pillow-heif -q)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npm --version)",
+      "Bash(mkdir -p _imgs_backup/produtos)",
+      "Bash(cp -r static/images/ _imgs_backup/)",
+      "Bash(cp media/produtos/* _imgs_backup/produtos/)",
+      "Bash(npx:*)",
+      "Bash(cp -r /tmp/novaroma/* /c/Users/calad/OneDrive/Desktop/NovaRoma/)",
+      "Bash(cp /tmp/novaroma/.gitignore /c/Users/calad/OneDrive/Desktop/NovaRoma/)",
+      "Bash(npm install:*)",
+      "Bash(cp /tmp/novaroma/postcss.config.mjs /tmp/novaroma/README.md /tmp/novaroma/tsconfig.json /c/Users/calad/OneDrive/Desktop/NovaRoma/)",
+      "Bash(cp -r /tmp/novaroma/public /c/Users/calad/OneDrive/Desktop/NovaRoma/)",
+      "Bash(/c/Users/calad/OneDrive/Desktop/NovaRoma/.env.local:*)",
+      "Bash(mkdir -p \"/c/Users/calad/OneDrive/Desktop/NovaRoma/app/produto/[id]\")",
+      "Bash(mkdir -p \"/c/Users/calad/OneDrive/Desktop/NovaRoma/app/adeeme/editar/[id]\")",
+      "Bash(mkdir -p \"/c/Users/calad/OneDrive/Desktop/NovaRoma/app/adeeme/estoque/[id]\")",
+      "Bash(./node_modules/.bin/tsc --noEmit)",
+      "Bash(ls /c/Users/calad/OneDrive/Desktop/NovaRoma/node_modules/.bin/tsc*)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(npm run:*)"
     ]
   }
 }
