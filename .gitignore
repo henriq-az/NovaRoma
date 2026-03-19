@@ -18,3 +18,4 @@ env/
 
 # Claude
 .claude/
+node_modules
