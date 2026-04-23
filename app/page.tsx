@@ -2,13 +2,14 @@
 
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { supabase, Produto, FotoProduto } from '@/lib/supabase'
 import { CartProvider, useCart } from '@/contexts/CartContext'
 import CartSidebar from '@/components/CartSidebar'
 import Toast from '@/components/Toast'
 import TextReveal from '@/components/TextReveal'
 
-type ProdutoComFoto = Produto & { foto?: string }
+type ProdutoComFoto = Produto & { foto?: string; esgotado?: boolean }
 
 const carouselImages = [
   '/images/carrosel/1.jpg',
@@ -34,7 +35,7 @@ function Splash() {
   if (!show) return null
   return (
     <div id="splash" className={hidden ? 'hide' : ''}>
-      <img src="/images/LOGOMARCA.png" alt="Nova Roma" id="splash-logo" />
+      <Image src="/images/LOGOMARCA.png" alt="Nova Roma" id="splash-logo" width={320} height={160} style={{ width: 'auto', height: 'auto' }} />
       <p id="splash-nome">Nova Roma</p>
     </div>
   )
@@ -48,7 +49,7 @@ function Nav() {
     <>
       <nav>
         <Link href="/" className="nav-logo-wrap">
-          <img src="/images/logo.png" alt="Nova Roma" style={{ height: 110 }} />
+          <Image src="/images/logo.png" alt="Nova Roma" width={220} height={110} style={{ height: 110, width: 'auto' }} />
           <span className="logo-wordmark">NOVA <span>ROMA</span></span>
         </Link>
         <ul className="nav-links">
@@ -101,7 +102,7 @@ function HeroPolaroidDesktop({ current, setCurrent }: { current: number, setCurr
         <div className="polaroid-slides">
           {carouselImages.map((src, i) => (
             <div key={src} className={`polaroid-slide${i === current ? ' active' : ''}`} style={{ background: '#2a1a0e' }}>
-              <img src={src} alt="Nova Roma" />
+              <Image src={src} alt="Nova Roma" fill style={{ objectFit: 'cover' }} />
             </div>
           ))}
         </div>
@@ -122,7 +123,7 @@ function HeroPolaroidMobile({ current, setCurrent }: { current: number, setCurre
         <div className="polaroid-slides">
           {carouselImages.map((src, i) => (
             <div key={src} className={`polaroid-slide${i === current ? ' active' : ''}`} style={{ background: '#2a1a0e' }}>
-              <img src={src} alt="Nova Roma" />
+              <Image src={src} alt="Nova Roma" fill style={{ objectFit: 'cover' }} />
             </div>
           ))}
         </div>
@@ -146,23 +147,40 @@ function HomePage() {
     async function load() {
       const { data: prods } = await supabase.from('produtos').select('*').order('criado_em', { ascending: false })
       if (!prods) return
-      const { data: fotos } = await supabase.from('fotos_produto').select('*').order('ordem')
+      const [{ data: fotos }, { data: estoques }] = await Promise.all([
+        supabase.from('fotos_produto').select('*').order('ordem'),
+        supabase.from('estoque_itens').select('produto_id, quantidade'),
+      ])
       const fotoMap: Record<number, string> = {}
       fotos?.forEach((f: FotoProduto) => {
         if (!fotoMap[f.produto_id]) fotoMap[f.produto_id] = f.url
       })
-      setProdutos(prods.map((p: Produto) => ({ ...p, foto: fotoMap[p.id] })))
+      const stockMap: Record<number, { hasEntries: boolean; hasStock: boolean }> = {}
+      estoques?.forEach((e: { produto_id: number; quantidade: number }) => {
+        if (!stockMap[e.produto_id]) stockMap[e.produto_id] = { hasEntries: false, hasStock: false }
+        stockMap[e.produto_id].hasEntries = true
+        if (e.quantidade > 0) stockMap[e.produto_id].hasStock = true
+      })
+      setProdutos(prods.map((p: Produto) => ({
+        ...p,
+        foto: fotoMap[p.id],
+        esgotado: stockMap[p.id]?.hasEntries === true && stockMap[p.id]?.hasStock === false,
+      })))
     }
     load()
   }, [])
 
-  function subscribe() {
-    if (nlEmail.includes('@')) {
-      showToast('Inscrito com sucesso!')
-      setNlEmail('')
-    } else {
-      showToast('Digite um email válido.')
-    }
+  async function subscribe() {
+    if (!nlEmail.includes('@')) { showToast('Digite um email válido.'); return }
+    const res = await fetch('/api/newsletter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: nlEmail }),
+    })
+    const json = await res.json()
+    if (json.ok) { showToast('Inscrito com sucesso!'); setNlEmail('') }
+    else if (json.error === 'ja_cadastrado') showToast('Este email já está cadastrado.')
+    else showToast('Digite um email válido.')
   }
 
   return (
@@ -227,12 +245,17 @@ function HomePage() {
               <Link key={p.id} href={`/produto/${p.id}`} className="polaroid-product">
                 <div className="polaroid-img-wrap">
                   {p.foto
-                    ? <img src={p.foto} alt={p.titulo} loading="lazy" />
+                    ? <Image src={p.foto} alt={p.titulo} fill style={{ objectFit: 'cover' }} />
                     : <div className="polaroid-no-foto">Sem foto</div>
                   }
-                  <div className="polaroid-hover-btn">
-                    <span className="prod-add">Ver Produto</span>
-                  </div>
+                  {p.esgotado && (
+                    <div className="polaroid-esgotado">Esgotado</div>
+                  )}
+                  {!p.esgotado && (
+                    <div className="polaroid-hover-btn">
+                      <span className="prod-add">Ver Produto</span>
+                    </div>
+                  )}
                 </div>
                 <div className="polaroid-caption">
                   <p className="prod-name">{p.titulo}</p>
@@ -287,7 +310,7 @@ function HomePage() {
         <div className="footer-top">
           <div>
             <div className="footer-logo-wrap">
-              <img src="/images/logo.png" alt="Nova Roma" style={{ height: 50, filter: 'brightness(0) invert(1)' }} />
+              <Image src="/images/logo.png" alt="Nova Roma" width={200} height={100} style={{ height: 50, width: 'auto', filter: 'brightness(0) invert(1)' }} />
               <span className="footer-logo-text">NOVA <span>ROMA</span></span>
             </div>
             <p className="footer-tag">Streetwear pernambucano feito por torcedores, para torcedores. Recife, PE.</p>

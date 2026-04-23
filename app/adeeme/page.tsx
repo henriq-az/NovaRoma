@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { supabase, Produto, FotoProduto } from '@/lib/supabase'
 import './admin.css'
 
@@ -54,7 +55,7 @@ export default function AdeemePage() {
             {produtos.map(p => (
               <div className="produto-card" key={p.id}>
                 {p.foto
-                  ? <img src={p.foto} alt={p.titulo} className="produto-thumb" />
+                  ? <Image src={p.foto} alt={p.titulo} width={400} height={300} className="produto-thumb" />
                   : <div className="produto-thumb-placeholder">Sem foto</div>
                 }
                 <div className="produto-body">

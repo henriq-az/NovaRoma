@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase, Produto, FotoProduto, EstoqueItem } from '@/lib/supabase'
+import Image from 'next/image'
 import { CartProvider, useCart } from '@/contexts/CartContext'
 import CartSidebar from '@/components/CartSidebar'
 import Toast from '@/components/Toast'
@@ -18,7 +19,7 @@ function Nav() {
     <>
       <nav>
         <Link href="/" className="nav-logo-wrap">
-          <img src="/images/logo.png" alt="Nova Roma" style={{ height: 110 }} />
+          <Image src="/images/logo.png" alt="Nova Roma" width={220} height={110} style={{ height: 110, width: 'auto' }} />
           <span className="logo-wordmark">NOVA <span>ROMA</span></span>
         </Link>
         <ul className="nav-links">
@@ -102,6 +103,8 @@ function ProdutoPage() {
     return estoque.find(e => e.tamanho === tam)?.quantidade ?? 0
   }
 
+  const esgotado = estoque.length > 0 && !TAMANHOS.some(t => getQtd(t) > 0)
+
   if (!produto) return null
 
   return (
@@ -113,12 +116,15 @@ function ProdutoPage() {
         {/* THUMB STRIP */}
         <div className="pd-thumbstrip" id="pd-thumbstrip">
           {fotos.map((foto, i) => (
-            <img
+            <Image
               key={foto.id}
               src={foto.url}
+              width={44}
+              height={52}
               className={`pd-thumb${i === fotoAtual ? ' ativo' : ''}`}
               onClick={() => setFotoAtual(i)}
               alt={`Foto ${i + 1}`}
+              style={{ objectFit: 'cover' }}
             />
           ))}
         </div>
@@ -128,7 +134,7 @@ function ProdutoPage() {
           <div className="pd-gallery-inner" id="pd-gallery-inner" onClick={() => fotos.length > 0 && setLbOpen(true)}>
             {fotos.length > 0 ? fotos.map((foto, i) => (
               <div key={foto.id} className={`pd-gallery-img${i === fotoAtual ? ' ativo' : ''}`}>
-                <img src={foto.url} alt={produto.titulo} />
+                <Image src={foto.url} alt={produto.titulo} fill style={{ objectFit: 'cover' }} />
               </div>
             )) : (
               <div className="pd-gallery-img ativo">
@@ -156,6 +162,11 @@ function ProdutoPage() {
           <div className="pd-preco-wrap">
             <span className="pd-preco-label">Preço</span>
             <span className="pd-preco">R$&nbsp;{Number(produto.preco).toFixed(2).replace('.', ',')}</span>
+            {esgotado && (
+              <span style={{ marginLeft: 12, padding: '4px 12px', background: '#fdecea', color: '#CC0000', fontFamily: "'Jost', sans-serif", fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                Esgotado
+              </span>
+            )}
           </div>
 
           <div className="pd-divider" />
@@ -183,9 +194,15 @@ function ProdutoPage() {
           </div>
 
           <div className="pd-cta">
-            <button className="pd-btn-cart" onClick={adicionarAoCarrinho}>
-              <span>+ Adicionar ao Carrinho</span>
-            </button>
+            {esgotado ? (
+              <button className="pd-btn-cart" disabled style={{ opacity: 0.45, cursor: 'not-allowed' }}>
+                <span>Produto Esgotado</span>
+              </button>
+            ) : (
+              <button className="pd-btn-cart" onClick={adicionarAoCarrinho}>
+                <span>+ Adicionar ao Carrinho</span>
+              </button>
+            )}
             <Link href="/#colecao" className="pd-voltar">Voltar à coleção</Link>
           </div>
 
@@ -214,7 +231,7 @@ function ProdutoPage() {
       {lbOpen && (
         <div className="lb-overlay open" onClick={() => setLbOpen(false)}>
           <button className="lb-close" onClick={() => setLbOpen(false)}>✕</button>
-          <img className="lb-img" src={fotos[fotoAtual]?.url} alt="" />
+          <Image className="lb-img" src={fotos[fotoAtual]?.url ?? ''} alt="" width={1200} height={1200} style={{ objectFit: 'contain', width: 'auto', height: 'auto' }} />
           {fotos.length > 1 && (
             <>
               <button className="lb-arrow lb-arrow-prev" onClick={e => { e.stopPropagation(); navFoto(-1) }}>←</button>

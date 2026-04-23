@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { supabase, Produto, FotoProduto } from '@/lib/supabase'
 
 type Props = {
@@ -133,8 +134,8 @@ export default function ProdutoForm({ produto, fotos: fotosIniciais = [] }: Prop
             </p>
             <div className="fotos-atuais">
               {fotos.map(f => (
-                <div className="foto-item" key={f.id}>
-                  <img src={f.url} alt="" />
+                <div className="foto-item" key={f.id} style={{ aspectRatio: '1' }}>
+                  <Image src={f.url} alt="" fill style={{ objectFit: 'cover', display: 'block', border: '1px solid rgba(107,63,31,0.1)' }} />
                   <button className="foto-item-remove" onClick={() => removerFoto(f.id)}>✕ Remover</button>
                 </div>
               ))}
