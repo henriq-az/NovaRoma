@@ -41,7 +41,10 @@ export default function AdeemePage() {
       <main className="adm-main">
         <div className="top-bar">
           <h1 className="page-title">Produtos</h1>
-          <Link href="/adeeme/criar" className="btn">+ Novo Produto</Link>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Link href="/adeeme/pedidos" className="btn-ghost">Pedidos</Link>
+            <Link href="/adeeme/criar" className="btn">+ Novo Produto</Link>
+          </div>
         </div>
 
         {produtos.length === 0 ? (

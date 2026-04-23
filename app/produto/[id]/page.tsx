@@ -94,7 +94,7 @@ function ProdutoPage() {
       setTimeout(() => setTamErro(false), 2000)
       return
     }
-    addItem(`${produto!.titulo} (${tamSelecionado})`, Number(produto!.preco))
+    addItem(produto!.id, produto!.titulo, tamSelecionado, Number(produto!.preco))
     toggleCart()
   }
 

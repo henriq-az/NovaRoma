@@ -26,7 +26,8 @@
       "Bash(./node_modules/.bin/tsc --noEmit)",
       "Bash(ls /c/Users/calad/OneDrive/Desktop/NovaRoma/node_modules/.bin/tsc*)",
       "Bash(node_modules/.bin/tsc --noEmit)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(node -e \"const mp = require\\(''''mercadopago''''\\); const p = new mp.Payment\\(new mp.MercadoPagoConfig\\({accessToken:''''test''''}\\)\\); console.log\\(Object.keys\\(p\\)\\)\")"
     ]
   }
 }

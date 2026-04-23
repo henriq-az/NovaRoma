@@ -2,8 +2,10 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
 
-type CartItem = {
+export type CartItem = {
+  produto_id: number
   name: string
+  tamanho: string
   price: number
   qty: number
 }
@@ -12,8 +14,8 @@ type CartContextType = {
   cart: CartItem[]
   cartOpen: boolean
   toast: string
-  addItem: (name: string, price: number) => void
-  removeItem: (name: string) => void
+  addItem: (produto_id: number, name: string, tamanho: string, price: number) => void
+  removeItem: (produto_id: number, tamanho: string) => void
   toggleCart: () => void
   showToast: (msg: string) => void
   total: number
@@ -32,17 +34,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setTimeout(() => setToast(''), 2400)
   }, [])
 
-  const addItem = useCallback((name: string, price: number) => {
+  const addItem = useCallback((produto_id: number, name: string, tamanho: string, price: number) => {
     setCart(prev => {
-      const ex = prev.find(i => i.name === name)
-      if (ex) return prev.map(i => i.name === name ? { ...i, qty: i.qty + 1 } : i)
-      return [...prev, { name, price, qty: 1 }]
+      const key = `${produto_id}-${tamanho}`
+      const ex = prev.find(i => `${i.produto_id}-${i.tamanho}` === key)
+      if (ex) return prev.map(i => `${i.produto_id}-${i.tamanho}` === key ? { ...i, qty: i.qty + 1 } : i)
+      return [...prev, { produto_id, name, tamanho, price, qty: 1 }]
     })
-    showToast(`${name} adicionado!`)
+    showToast(`${name} (${tamanho}) adicionado!`)
   }, [showToast])
 
-  const removeItem = useCallback((name: string) => {
-    setCart(prev => prev.filter(i => i.name !== name))
+  const removeItem = useCallback((produto_id: number, tamanho: string) => {
+    setCart(prev => prev.filter(i => !(i.produto_id === produto_id && i.tamanho === tamanho)))
   }, [])
 
   const toggleCart = useCallback(() => setCartOpen(v => !v), [])
