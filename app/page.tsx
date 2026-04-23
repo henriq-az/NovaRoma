@@ -6,6 +6,7 @@ import { supabase, Produto, FotoProduto } from '@/lib/supabase'
 import { CartProvider, useCart } from '@/contexts/CartContext'
 import CartSidebar from '@/components/CartSidebar'
 import Toast from '@/components/Toast'
+import TextReveal from '@/components/TextReveal'
 
 type ProdutoComFoto = Produto & { foto?: string }
 
@@ -193,11 +194,6 @@ function HomePage() {
           <div className="hero-right-pattern" />
           <div className="hero-right-block" />
           <HeroPolaroidDesktop current={polaroidCurrent} setCurrent={setPolaroidCurrent} />
-          <div className="hero-stamp">
-            <span>EST</span>
-            <span className="stamp-yr">2025</span>
-            <span>Recife</span>
-          </div>
         </div>
       </section>
 
@@ -231,7 +227,7 @@ function HomePage() {
               <Link key={p.id} href={`/produto/${p.id}`} className="polaroid-product">
                 <div className="polaroid-img-wrap">
                   {p.foto
-                    ? <img src={p.foto} alt={p.titulo} />
+                    ? <img src={p.foto} alt={p.titulo} loading="lazy" />
                     : <div className="polaroid-no-foto">Sem foto</div>
                   }
                   <div className="polaroid-hover-btn">
@@ -250,15 +246,17 @@ function HomePage() {
 
       {/* MANIFESTO */}
       <section className="manifesto" id="sobre">
-        <div>
+        <TextReveal>
           <p className="section-eyebrow">Nossa história</p>
           <h2 className="section-title">FEITO POR<br />TORCEDORES</h2>
           <blockquote className="manifesto-quote">"Futebol pernambucano é fé, raça e identidade."</blockquote>
           <p className="manifesto-body">
-            A Nova Roma nasceu nas ruas do Recife, onde futebol e cultura se fundem em paixão pura. Cada camiseta é um manifesto — de quem vai ao estádio, de quem grita na quebrada, de quem carrega o escudo no peito além das quatro linhas.<br /><br />
+            A Nova Roma nasceu nas ruas do Recife, onde futebol e cultura se fundem em paixão pura. Cada camiseta é um manifesto — de quem vai ao estádio, de quem grita na quebrada, de quem carrega o escudo no peito além das quatro linhas.
+          </p>
+          <p className="manifesto-body">
             Produção local, tecidos de qualidade, design que respeita a história dos três gigantes do estado. Sem rodeios, sem modinha. Só orgulho pernambucano de verdade.
           </p>
-        </div>
+        </TextReveal>
         <div className="manifesto-visual">
           <div className="mv-b"><span className="mv-txt">LEÃO<br />DO NORTE</span></div>
           <div className="mv-b"><span className="mv-txt">O<br />TIMBU</span></div>

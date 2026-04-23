@@ -46,10 +46,45 @@ export async function POST(request: Request) {
     status === 'rejected' ? 'rejeitado' :
     status === 'cancelled' ? 'cancelado' : 'pendente'
 
+  const { data: pedidoAtual } = await supabase
+    .from('pedidos')
+    .select('status')
+    .eq('id', pedido.id)
+    .single()
+
+  const payer = (payment as unknown as Record<string, unknown>).payer as Record<string, unknown> | undefined
+  const ship  = (payment as unknown as Record<string, unknown>).shipments as Record<string, unknown> | undefined
+  const addr  = (ship?.receiver_address ?? payer?.address) as Record<string, unknown> | undefined
+
+  const clienteData: Record<string, unknown> = { status: novoStatus, mp_payment_id: String(paymentId) }
+  if (payer?.email)       clienteData.email_cliente     = payer.email
+  if (payer?.first_name)  clienteData.nome_cliente      = [payer.first_name, payer.last_name].filter(Boolean).join(' ')
+  if ((payer?.phone as Record<string, unknown>)?.number) {
+    clienteData.telefone_cliente = String((payer!.phone as Record<string, unknown>).number)
+  }
+  if (addr) {
+    clienteData.endereco = {
+      zip_code:      addr.zip_code      ?? addr.zipCode,
+      street_name:   addr.street_name   ?? addr.streetName,
+      street_number: addr.street_number ?? addr.streetNumber,
+      neighborhood:  addr.neighborhood,
+      city:          addr.city          ?? (addr.city_name),
+      state:         addr.state_name    ?? addr.state,
+    }
+  }
+
   await supabase
     .from('pedidos')
-    .update({ status: novoStatus, mp_payment_id: String(paymentId) })
+    .update(clienteData)
     .eq('id', pedido.id)
+
+  if (pedidoAtual && pedidoAtual.status !== novoStatus) {
+    await supabase.from('historico_pedido').insert({
+      pedido_id:       String(pedido.id),
+      status_anterior: pedidoAtual.status,
+      status_novo:     novoStatus,
+    })
+  }
 
   if (novoStatus === 'aprovado') {
     const { data: itens } = await supabase

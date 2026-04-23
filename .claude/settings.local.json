@@ -27,7 +27,9 @@
       "Bash(ls /c/Users/calad/OneDrive/Desktop/NovaRoma/node_modules/.bin/tsc*)",
       "Bash(node_modules/.bin/tsc --noEmit)",
       "Bash(npm run:*)",
-      "Bash(node -e \"const mp = require\\(''''mercadopago''''\\); const p = new mp.Payment\\(new mp.MercadoPagoConfig\\({accessToken:''''test''''}\\)\\); console.log\\(Object.keys\\(p\\)\\)\")"
+      "Bash(node -e \"const mp = require\\(''''mercadopago''''\\); const p = new mp.Payment\\(new mp.MercadoPagoConfig\\({accessToken:''''test''''}\\)\\); console.log\\(Object.keys\\(p\\)\\)\")",
+      "Bash(npm list:*)",
+      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\(JSON.stringify\\({...p.dependencies, ...p.devDependencies}, null, 2\\)\\)\")"
     ]
   }
 }
