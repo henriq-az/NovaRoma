@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { supabase, Produto, FotoProduto } from '@/lib/supabase'
@@ -10,6 +10,66 @@ import Toast from '@/components/Toast'
 import TextReveal from '@/components/TextReveal'
 
 type ProdutoComFoto = Produto & { foto?: string; esgotado?: boolean }
+
+const TICKER_ITEMS = [
+  'Nordestino', 'Leão', 'Timbu', 'Cobra Coral',
+  'Nova Roma · Recife · PE', 'Feito com Orgulho Nordestino',
+]
+
+function Ticker() {
+  const trackRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    function makeSet() {
+      const wrap = document.createElement('span')
+      wrap.className = 'ticker-set'
+      TICKER_ITEMS.forEach(item => {
+        const s = document.createElement('span')
+        s.className = 'ticker-item'
+        s.textContent = item
+        wrap.appendChild(s)
+        const sep = document.createElement('span')
+        sep.className = 'ticker-sep'
+        sep.textContent = '◆'
+        wrap.appendChild(sep)
+      })
+      return wrap
+    }
+
+    track.innerHTML = ''
+    track.appendChild(makeSet())
+    track.appendChild(makeSet())
+
+    let x = 0
+    let raf: number
+
+    function tick() {
+      x -= 1
+
+      const first = track.firstElementChild as HTMLElement | null
+      if (first && first.offsetWidth > 0 && x + first.offsetWidth <= 0) {
+        x += first.offsetWidth
+        track.removeChild(first)
+        track.appendChild(makeSet())
+      }
+
+      track.style.transform = `translateX(${x}px)`
+      raf = requestAnimationFrame(tick)
+    }
+
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
+  return (
+    <div className="ticker" aria-hidden="true">
+      <div ref={trackRef} className="ticker-track" />
+    </div>
+  )
+}
 
 const carouselImages = [
   '/images/carrosel/1.jpg',
@@ -215,21 +275,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* TICKER */}
-      <div className="ticker">
-        <div className="ticker-track">
-          <span className="ticker-item">Leão</span><span className="ticker-sep">◆</span>
-          <span className="ticker-item">Timbu</span><span className="ticker-sep">◆</span>
-          <span className="ticker-item">Cobra Coral</span><span className="ticker-sep">◆</span>
-          <span className="ticker-item">Nova Roma · Recife · PE</span><span className="ticker-sep">◆</span>
-          <span className="ticker-item">Feito com Orgulho Nordestino</span><span className="ticker-sep">◆</span>
-          <span className="ticker-item">Leão</span><span className="ticker-sep">◆</span>
-          <span className="ticker-item">Timbu</span><span className="ticker-sep">◆</span>
-          <span className="ticker-item">Cobra Coral</span><span className="ticker-sep">◆</span>
-          <span className="ticker-item">Nova Roma · Recife · PE</span><span className="ticker-sep">◆</span>
-          <span className="ticker-item">Feito com Orgulho Nordestino</span><span className="ticker-sep">◆</span>
-        </div>
-      </div>
 
       {/* COLEÇÃO */}
       <section className="section" id="colecao" style={{ background: '#C49A6C' }}>

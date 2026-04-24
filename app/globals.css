@@ -425,9 +425,16 @@ nav {
 }
 
 .ticker-track {
-  display: inline-flex;
-  animation: tick 30s linear infinite;
+  display: flex;
+  white-space: nowrap;
   will-change: transform;
+}
+
+.ticker-set {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .ticker-item {
