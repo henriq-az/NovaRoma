@@ -19,6 +19,7 @@ export async function POST(request: Request) {
 
   const supabase = getServiceSupabase()
   const baseUrl  = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin
+  console.log('[checkout] notification_url:', `${baseUrl}/api/webhook/mercadopago`)
 
   const subtotal = itens.reduce((s: number, i: { price: number; qty: number }) => s + i.price * i.qty, 0)
 
