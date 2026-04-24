@@ -200,6 +200,7 @@ function HeroPolaroidMobile({ current, setCurrent }: { current: number, setCurre
 function HomePage() {
   const [produtos, setProdutos] = useState<ProdutoComFoto[]>([])
   const [nlEmail, setNlEmail] = useState('')
+  const [guiaOpen, setGuiaOpen] = useState(false)
   const { showToast } = useCart()
   const { current: polaroidCurrent, setCurrent: setPolaroidCurrent } = usePolaroid()
 
@@ -363,25 +364,20 @@ function HomePage() {
           <div className="footer-col">
             <h4>Coleções</h4>
             <ul>
-              <li>Leão Collection</li>
-              <li>Timbu Collection</li>
-              <li>Cobra Coral Collection</li>
-              <li>Collab Drops</li>
+              <li><Link href="/#colecao" className="footer-col-link">Nosso Bairrismo</Link></li>
             </ul>
           </div>
           <div className="footer-col">
             <h4>Informações</h4>
             <ul>
-              <li>Sobre Nós</li>
-              <li>Guia de Tamanhos</li>
-              <li>Política de Troca</li>
-              <li>Frete e Entrega</li>
+              <li><Link href="/#sobre" className="footer-col-link">Sobre Nós</Link></li>
+              <li><button className="footer-col-link footer-col-btn" onClick={() => setGuiaOpen(true)}>Guia de Tamanhos</button></li>
             </ul>
           </div>
           <div className="footer-col">
             <h4>Contato</h4>
             <ul>
-              <li>contato@novaroma.com</li>
+              <li>novaromafc0@gmail.com</li>
               <li>Recife — PE</li>
               <li>
                 <a
@@ -426,6 +422,63 @@ function HomePage() {
           </div>
         </div>
       </footer>
+
+      {guiaOpen && (
+        <div className="guia-overlay" onClick={() => setGuiaOpen(false)}>
+          <div className="guia-modal" onClick={e => e.stopPropagation()}>
+            <div className="guia-hdr">
+              <div>
+                <p className="guia-eyebrow">Modelagem Oversized</p>
+                <h2 className="guia-title">Guia de Tamanhos</h2>
+              </div>
+              <button className="guia-close" onClick={() => setGuiaOpen(false)}>✕</button>
+            </div>
+            <div className="guia-body">
+              <div className="guia-diagram">
+                <svg viewBox="0 0 210 236" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M76 22 L28 56 L52 80 L52 190 L158 190 L158 80 L182 56 L134 22 Q118 40 105 40 Q92 40 76 22 Z" stroke="#6B3F1F" strokeWidth="1.4" fill="rgba(196,154,108,0.07)" strokeLinejoin="round"/>
+                  <path d="M76 22 Q92 40 105 40 Q118 40 134 22" stroke="#6B3F1F" strokeWidth="1.4" fill="none"/>
+                  <line x1="30" y1="80" x2="30" y2="190" stroke="#C49A6C" strokeWidth="1" strokeDasharray="4 3"/>
+                  <line x1="30" y1="80" x2="52" y2="80" stroke="#C49A6C" strokeWidth="1" strokeOpacity="0.4"/>
+                  <line x1="30" y1="190" x2="52" y2="190" stroke="#C49A6C" strokeWidth="1" strokeOpacity="0.4"/>
+                  <polygon points="30,82 27,90 33,90" fill="#C49A6C"/>
+                  <polygon points="30,188 27,180 33,180" fill="#C49A6C"/>
+                  <text x="10" y="138" fontSize="8.5" fill="#C49A6C" fontFamily="Economica,sans-serif" textAnchor="middle" letterSpacing="2" transform="rotate(-90,10,138)">ALTURA</text>
+                  <line x1="52" y1="210" x2="158" y2="210" stroke="#C49A6C" strokeWidth="1" strokeDasharray="4 3"/>
+                  <line x1="52" y1="190" x2="52" y2="210" stroke="#C49A6C" strokeWidth="1" strokeOpacity="0.4"/>
+                  <line x1="158" y1="190" x2="158" y2="210" stroke="#C49A6C" strokeWidth="1" strokeOpacity="0.4"/>
+                  <polygon points="52,210 60,207 60,213" fill="#C49A6C"/>
+                  <polygon points="158,210 150,207 150,213" fill="#C49A6C"/>
+                  <text x="105" y="228" fontSize="8.5" fill="#C49A6C" fontFamily="Economica,sans-serif" textAnchor="middle" letterSpacing="2">LARGURA</text>
+                </svg>
+                <p className="guia-diagram-label">medidas em centímetros</p>
+              </div>
+              <div className="guia-table-wrap">
+                <table className="guia-table">
+                  <thead>
+                    <tr><th>TAM</th><th>Altura</th><th>Largura</th></tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { tam: 'PP', altura: 68, largura: 50 },
+                      { tam: 'P',  altura: 70, largura: 56 },
+                      { tam: 'M',  altura: 72, largura: 57 },
+                      { tam: 'G',  altura: 76, largura: 60 },
+                      { tam: 'GG', altura: 79, largura: 63 },
+                    ].map(row => (
+                      <tr key={row.tam}>
+                        <td className="guia-td-tam">{row.tam}</td>
+                        <td className="guia-td-num">{row.altura}<span className="guia-unit"> cm</span></td>
+                        <td className="guia-td-num">{row.largura}<span className="guia-unit"> cm</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <CartSidebar />
       <Toast />
