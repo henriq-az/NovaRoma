@@ -1,4 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
+import React from 'react'
+import { sendEmail } from '@/lib/email'
+import { WelcomeEmail } from '@/emails/WelcomeEmail'
 
 function getServiceSupabase() {
   return createClient(
@@ -23,6 +26,14 @@ export async function POST(request: Request) {
     }
     return Response.json({ error: 'erro_interno' }, { status: 500 })
   }
+
+  // Fire-and-forget — não bloqueia a resposta
+  sendEmail({
+    to:      email,
+    subject: 'Bem-vindo à Nova Roma',
+    react:   React.createElement(WelcomeEmail, {}),
+    tipo:    'welcome',
+  }).catch(() => {})
 
   return Response.json({ ok: true })
 }

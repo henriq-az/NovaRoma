@@ -11,23 +11,56 @@ function getServiceSupabase() {
 }
 
 export async function POST(request: Request) {
-  const { itens, email } = await request.json()
+  const { itens, email, cupomId } = await request.json()
 
   if (!itens || itens.length === 0) {
     return Response.json({ error: 'Carrinho vazio' }, { status: 400 })
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin
+  const supabase = getServiceSupabase()
+  const baseUrl  = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin
+
+  const subtotal = itens.reduce((s: number, i: { price: number; qty: number }) => s + i.price * i.qty, 0)
+
+  // Resolve cupom se fornecido
+  let desconto = 0
+  let cupomValido: { id: number; tipo: string; valor: number } | null = null
+
+  if (cupomId) {
+    const { data: cupom } = await supabase
+      .from('cupons')
+      .select('id, tipo, valor, ativo, valido_ate, uso_maximo, usos_atuais')
+      .eq('id', cupomId)
+      .single()
+
+    const ainda_valido =
+      cupom &&
+      cupom.ativo &&
+      (!cupom.valido_ate || new Date(cupom.valido_ate) >= new Date()) &&
+      (cupom.uso_maximo === null || cupom.usos_atuais < cupom.uso_maximo)
+
+    if (ainda_valido) {
+      cupomValido = { id: cupom.id, tipo: cupom.tipo, valor: Number(cupom.valor) }
+      desconto =
+        cupom.tipo === 'percentual'
+          ? Math.min(subtotal * (Number(cupom.valor) / 100), subtotal)
+          : Math.min(Number(cupom.valor), subtotal)
+      desconto = Math.round(desconto * 100) / 100
+    }
+  }
+
+  const totalFinal = Math.max(0, subtotal - desconto)
 
   const preference = new Preference(mp)
   const pref = await preference.create({
     body: {
-      items: itens.map((item: { name: string; price: number; qty: number; tamanho: string }) => ({
-        title: `${item.name} (${item.tamanho})`,
-        quantity: item.qty,
-        unit_price: item.price,
+      items: [{
+        id: 'pedido',
+        title: 'Pedido Nova Roma',
+        quantity: 1,
+        unit_price: totalFinal,
         currency_id: 'BRL',
-      })),
+      }],
       payer: email ? { email } : undefined,
       back_urls: {
         success: `${baseUrl}/pedido/sucesso`,
@@ -38,28 +71,31 @@ export async function POST(request: Request) {
     },
   })
 
-  const total = itens.reduce((s: number, i: { price: number; qty: number }) => s + i.price * i.qty, 0)
-
-  const supabase = getServiceSupabase()
+  const pedidoInsert: Record<string, unknown> = {
+    mp_preference_id: pref.id,
+    status:  'pendente',
+    total:   totalFinal,
+    desconto,
+  }
+  if (cupomValido) pedidoInsert.cupom_id = cupomValido.id
 
   const { data: pedido, error: pedidoErr } = await supabase
     .from('pedidos')
-    .insert({ mp_preference_id: pref.id, status: 'pendente', total })
+    .insert(pedidoInsert)
     .select()
     .single()
 
   if (pedidoErr || !pedido) {
-    console.error('Erro ao criar pedido:', pedidoErr)
     return Response.json({ error: 'Erro ao salvar pedido' }, { status: 500 })
   }
 
   const itensPedido = itens.map((item: { produto_id: number; name: string; tamanho: string; price: number; qty: number }) => ({
-    pedido_id: pedido.id,
+    pedido_id:  pedido.id,
     produto_id: item.produto_id,
-    nome: item.name,
-    tamanho: item.tamanho,
+    titulo:     item.name,
+    tamanho:    item.tamanho,
     quantidade: item.qty,
-    preco: item.price,
+    preco_unit: item.price,
   }))
 
   await supabase.from('itens_pedido').insert(itensPedido)

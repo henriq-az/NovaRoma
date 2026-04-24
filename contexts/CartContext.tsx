@@ -10,6 +10,13 @@ export type CartItem = {
   qty: number
 }
 
+type Cupom = {
+  codigo: string
+  cupomId: number
+  tipo: 'percentual' | 'fixo'
+  valor: number
+}
+
 type CartContextType = {
   cart: CartItem[]
   cartOpen: boolean
@@ -19,7 +26,12 @@ type CartContextType = {
   toggleCart: () => void
   showToast: (msg: string) => void
   total: number
+  desconto: number
+  totalFinal: number
   count: number
+  cupom: Cupom | null
+  applyCoupon: (codigo: string) => Promise<{ ok: boolean; error?: string }>
+  removeCoupon: () => void
 }
 
 const CartContext = createContext<CartContextType | null>(null)
@@ -28,6 +40,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([])
   const [cartOpen, setCartOpen] = useState(false)
   const [toast, setToast] = useState('')
+  const [cupom, setCupom] = useState<Cupom | null>(null)
 
   const showToast = useCallback((msg: string) => {
     setToast(msg)
@@ -50,11 +63,38 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const toggleCart = useCallback(() => setCartOpen(v => !v), [])
 
+  const removeCoupon = useCallback(() => setCupom(null), [])
+
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0)
-  const count = cart.reduce((s, i) => s + i.qty, 0)
+
+  const desconto = cupom
+    ? cupom.tipo === 'percentual'
+      ? Math.min(total * (cupom.valor / 100), total)
+      : Math.min(cupom.valor, total)
+    : 0
+
+  const totalFinal = Math.max(0, total - desconto)
+
+  const applyCoupon = useCallback(async (codigo: string): Promise<{ ok: boolean; error?: string }> => {
+    const res = await fetch('/api/cupons/validar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codigo, total }),
+    })
+    const data = await res.json()
+    if (data.ok) {
+      setCupom({ codigo: codigo.toUpperCase().trim(), cupomId: data.cupomId, tipo: data.tipo, valor: data.valor })
+      return { ok: true }
+    }
+    return { ok: false, error: data.error }
+  }, [total])
 
   return (
-    <CartContext.Provider value={{ cart, cartOpen, toast, addItem, removeItem, toggleCart, showToast, total, count }}>
+    <CartContext.Provider value={{
+      cart, cartOpen, toast, addItem, removeItem, toggleCart, showToast,
+      total, desconto, totalFinal, count: cart.reduce((s, i) => s + i.qty, 0),
+      cupom, applyCoupon, removeCoupon,
+    }}>
       {children}
     </CartContext.Provider>
   )

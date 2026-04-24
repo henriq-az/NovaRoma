@@ -61,6 +61,7 @@ function ProdutoPage() {
   const [tamSelecionado, setTamSelecionado] = useState<string | null>(null)
   const [tamErro, setTamErro] = useState(false)
   const [lbOpen, setLbOpen] = useState(false)
+  const [guiaOpen, setGuiaOpen] = useState(false)
   const { addItem, toggleCart } = useCart()
 
   useEffect(() => {
@@ -79,7 +80,7 @@ function ProdutoPage() {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'ArrowLeft') navFoto(-1)
       if (e.key === 'ArrowRight') navFoto(1)
-      if (e.key === 'Escape') setLbOpen(false)
+      if (e.key === 'Escape') { setLbOpen(false); setGuiaOpen(false) }
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
@@ -192,6 +193,9 @@ function ProdutoPage() {
               )
             })}
           </div>
+          <button className="pd-guia-btn" onClick={() => setGuiaOpen(true)}>
+            Guia de Tamanhos →
+          </button>
 
           <div className="pd-cta">
             {esgotado ? (
@@ -226,6 +230,90 @@ function ProdutoPage() {
           </div>
         </div>
       </div>
+
+      {/* GUIA DE TAMANHOS */}
+      {guiaOpen && (
+        <div className="guia-overlay" onClick={() => setGuiaOpen(false)}>
+          <div className="guia-modal" onClick={e => e.stopPropagation()}>
+
+            <div className="guia-hdr">
+              <div>
+                <p className="guia-eyebrow">Modelagem Oversized</p>
+                <h2 className="guia-title">Guia de Tamanhos</h2>
+              </div>
+              <button className="guia-close" onClick={() => setGuiaOpen(false)}>✕</button>
+            </div>
+
+            <div className="guia-body">
+              {/* Diagrama SVG */}
+              <div className="guia-diagram">
+                <svg viewBox="0 0 210 236" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* Corpo da camiseta */}
+                  <path
+                    d="M76 22 L28 56 L52 80 L52 190 L158 190 L158 80 L182 56 L134 22 Q118 40 105 40 Q92 40 76 22 Z"
+                    stroke="#6B3F1F" strokeWidth="1.4" fill="rgba(196,154,108,0.07)" strokeLinejoin="round"
+                  />
+                  {/* Gola */}
+                  <path d="M76 22 Q92 40 105 40 Q118 40 134 22" stroke="#6B3F1F" strokeWidth="1.4" fill="none"/>
+
+                  {/* Seta Altura — vertical esquerda */}
+                  <line x1="30" y1="80" x2="30" y2="190" stroke="#C49A6C" strokeWidth="1" strokeDasharray="4 3"/>
+                  <line x1="30" y1="80" x2="52" y2="80" stroke="#C49A6C" strokeWidth="1" strokeOpacity="0.4"/>
+                  <line x1="30" y1="190" x2="52" y2="190" stroke="#C49A6C" strokeWidth="1" strokeOpacity="0.4"/>
+                  <polygon points="30,82 27,90 33,90" fill="#C49A6C"/>
+                  <polygon points="30,188 27,180 33,180" fill="#C49A6C"/>
+                  <text x="10" y="138" fontSize="8.5" fill="#C49A6C" fontFamily="Economica,sans-serif"
+                    textAnchor="middle" letterSpacing="2" transform="rotate(-90,10,138)">ALTURA</text>
+
+                  {/* Seta Largura — horizontal inferior */}
+                  <line x1="52" y1="210" x2="158" y2="210" stroke="#C49A6C" strokeWidth="1" strokeDasharray="4 3"/>
+                  <line x1="52" y1="190" x2="52" y2="210" stroke="#C49A6C" strokeWidth="1" strokeOpacity="0.4"/>
+                  <line x1="158" y1="190" x2="158" y2="210" stroke="#C49A6C" strokeWidth="1" strokeOpacity="0.4"/>
+                  <polygon points="52,210 60,207 60,213" fill="#C49A6C"/>
+                  <polygon points="158,210 150,207 150,213" fill="#C49A6C"/>
+                  <text x="105" y="228" fontSize="8.5" fill="#C49A6C" fontFamily="Economica,sans-serif"
+                    textAnchor="middle" letterSpacing="2">LARGURA</text>
+                </svg>
+                <p className="guia-diagram-label">medidas em centímetros</p>
+              </div>
+
+              {/* Tabela */}
+              <div className="guia-table-wrap">
+                {tamSelecionado && (
+                  <div className="guia-selected-tag">
+                    Selecionado: <strong>{tamSelecionado}</strong>
+                  </div>
+                )}
+                <table className="guia-table">
+                  <thead>
+                    <tr>
+                      <th>TAM</th>
+                      <th>Altura</th>
+                      <th>Largura</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { tam: 'PP', altura: 68, largura: 50 },
+                      { tam: 'P',  altura: 70, largura: 56 },
+                      { tam: 'M',  altura: 72, largura: 57 },
+                      { tam: 'G',  altura: 76, largura: 60 },
+                      { tam: 'GG', altura: 79, largura: 63 },
+                    ].map(row => (
+                      <tr key={row.tam} className={tamSelecionado === row.tam ? 'guia-row-active' : ''}>
+                        <td className="guia-td-tam">{row.tam}</td>
+                        <td className="guia-td-num">{row.altura}<span className="guia-unit"> cm</span></td>
+                        <td className="guia-td-num">{row.largura}<span className="guia-unit"> cm</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* LIGHTBOX */}
       {lbOpen && (

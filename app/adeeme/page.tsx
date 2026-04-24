@@ -44,6 +44,7 @@ export default function AdeemePage() {
           <h1 className="page-title">Produtos</h1>
           <div style={{ display: 'flex', gap: 8 }}>
             <Link href="/adeeme/pedidos" className="btn-ghost">Pedidos</Link>
+            <Link href="/adeeme/cupons" className="btn-ghost">Cupons</Link>
             <Link href="/adeeme/criar" className="btn">+ Novo Produto</Link>
           </div>
         </div>

@@ -53,6 +53,7 @@ export default function TextReveal({ children, className, style }: Props) {
           opacity: 1,
           duration: 1.4,
           stagger: 0.12,
+          delay: 0.3,
           ease: 'expo.out',
           overwrite: true,
         })
