@@ -42,7 +42,7 @@ export default function CartSidebar() {
       if (data.checkout_url) {
         window.location.href = data.checkout_url
       } else {
-        alert('Erro ao iniciar checkout. Tente novamente.')
+        alert(`Erro ao iniciar checkout: ${data.detail || data.error || 'Tente novamente.'}`)
         setLoading(false)
       }
     } catch {

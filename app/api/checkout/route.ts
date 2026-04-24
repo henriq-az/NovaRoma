@@ -75,9 +75,9 @@ export async function POST(request: Request) {
     mp_preference_id: pref.id,
     status:  'pendente',
     total:   totalFinal,
-    desconto,
   }
-  if (cupomValido) pedidoInsert.cupom_id = cupomValido.id
+  if (desconto > 0)  pedidoInsert.desconto  = desconto
+  if (cupomValido)   pedidoInsert.cupom_id  = cupomValido.id
 
   const { data: pedido, error: pedidoErr } = await supabase
     .from('pedidos')
@@ -86,7 +86,8 @@ export async function POST(request: Request) {
     .single()
 
   if (pedidoErr || !pedido) {
-    return Response.json({ error: 'Erro ao salvar pedido' }, { status: 500 })
+    console.error('[checkout] erro ao salvar pedido:', pedidoErr)
+    return Response.json({ error: 'Erro ao salvar pedido', detail: pedidoErr?.message }, { status: 500 })
   }
 
   const itensPedido = itens.map((item: { produto_id: number; name: string; tamanho: string; price: number; qty: number }) => ({
