@@ -46,7 +46,7 @@ function Ticker() {
     let x = 0
     let raf: number
 
-    function tick() {
+    const tick = () => {
       x -= 1
 
       const first = track.firstElementChild as HTMLElement | null
