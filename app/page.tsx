@@ -119,7 +119,7 @@ function Nav() {
         </ul>
         <button className="nav-cart" onClick={toggleCart}>
           Carrinho
-          <span className="cart-count">{count}</span>
+          {count > 0 && <span className="cart-count">{count}</span>}
         </button>
         <button
           className={`menu-toggle${menuOpen ? ' active' : ''}`}
