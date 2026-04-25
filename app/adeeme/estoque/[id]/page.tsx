@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
+import Link from 'next/link'
 import { supabase, Produto, EstoqueItem } from '@/lib/supabase'
 import AdminHeader from '@/components/AdminHeader'
 import '../../admin.css'
