@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import AdminHeader from '@/components/AdminHeader'
 import '../admin.css'
 
 type Cupom = {
@@ -86,10 +87,7 @@ export default function CuponsPage() {
 
   return (
     <>
-      <header className="adm-header">
-        <Link href="/" className="header-logo">NOVA <span>ROMA</span></Link>
-        <span className="header-tag">Painel de Administração</span>
-      </header>
+      <AdminHeader />
 
       <main className="adm-main">
         <div className="top-bar">

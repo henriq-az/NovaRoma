@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import Link from 'next/link'
 import { supabase, Produto, EstoqueItem } from '@/lib/supabase'
+import AdminHeader from '@/components/AdminHeader'
 import '../../admin.css'
 
 const TAMANHOS: EstoqueItem['tamanho'][] = ['PP', 'P', 'M', 'G', 'GG', 'XG']
@@ -52,10 +52,7 @@ export default function EstoquePage() {
 
   return (
     <>
-      <header className="adm-header">
-        <Link href="/" className="header-logo">NOVA <span>ROMA</span></Link>
-        <span className="header-tag">Painel de Administração</span>
-      </header>
+      <AdminHeader />
 
       <main className="adm-main-narrow">
         <Link href="/adeeme" className="back">← Voltar aos Produtos</Link>

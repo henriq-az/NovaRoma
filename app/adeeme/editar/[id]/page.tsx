@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import Link from 'next/link'
 import ProdutoForm from '@/components/ProdutoForm'
 import { supabase, Produto, FotoProduto } from '@/lib/supabase'
+import AdminHeader from '@/components/AdminHeader'
 import '../../admin.css'
 
 export default function EditarPage() {
@@ -24,10 +24,7 @@ export default function EditarPage() {
 
   return (
     <>
-      <header className="adm-header">
-        <Link href="/" className="header-logo">NOVA <span>ROMA</span></Link>
-        <span className="header-tag">Painel de Administração</span>
-      </header>
+      <AdminHeader />
       {produto
         ? <ProdutoForm produto={produto} fotos={fotos} />
         : <main className="adm-main-narrow"><p style={{ color: 'var(--text-muted)', paddingTop: 48 }}>Carregando...</p></main>

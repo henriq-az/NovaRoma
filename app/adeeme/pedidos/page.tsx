@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, Fragment } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import AdminHeader from '@/components/AdminHeader'
 import '../admin.css'
 import PedidoModal, { type PedidoDetalhe } from './PedidoModal'
 
@@ -507,10 +508,7 @@ export default function PedidosPage() {
 
   return (
     <>
-      <header className="adm-header">
-        <Link href="/" className="header-logo">NOVA <span>ROMA</span></Link>
-        <span className="header-tag">Painel de Administração</span>
-      </header>
+      <AdminHeader />
 
       <main className="adm-main">
         <div className="top-bar">

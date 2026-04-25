@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { supabase, Produto, FotoProduto } from '@/lib/supabase'
+import AdminHeader from '@/components/AdminHeader'
 import './admin.css'
 
 type ProdutoComFoto = Produto & { foto?: string }
@@ -34,10 +35,7 @@ export default function AdeemePage() {
 
   return (
     <>
-      <header className="adm-header">
-        <Link href="/" className="header-logo">NOVA <span>ROMA</span></Link>
-        <span className="header-tag">Painel de Administração</span>
-      </header>
+      <AdminHeader />
 
       <main className="adm-main">
         <div className="top-bar">
